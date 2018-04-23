@@ -1,4 +1,128 @@
 import math
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def CalculatePanelCoefficients(XB, YB, M, alpha, NACA, PLOT, color):
+    """
+    Function: CalculatePanelCoefficients
+    Purpose: Formulates the system of equations for the vortex paneling method.
+
+    Parameters:
+        XB - The dimensionless boundary x locations on the airfoil
+        YB - The dimensionless boundary y locations on the airfoil
+        M - The total number of panels
+        alpha - The angle of attack
+        NACA - The string that specifies the 4-digit NACA airfoil, ex: 0012
+        PLOT - Whether or not to plot Cp vs. x/c; if the plot is desired,
+            Plot == 1, if the plot is not desired then PLOT == 0
+
+    Returns:
+        cl - The lift coefficient
+    """
+
+    alpha = math.radians(alpha)
+
+    MP1 = M+1 # The trailing edge requries an extra point
+
+    """ TODO: Find better variable names for these arrays """
+    X = np.zeros((1,M))
+    Y = np.zeros((1,M))
+    RHS = np.zeros((M,1))
+    theta = np.zeros((1,M))
+    S = np.zeros((1,M))
+
+    for i in range(M):
+        IP1 = i + 1
+
+        X[i] = 0.5 * (XB[i] + XB[IP1])
+        Y[i] = 0.5 * (YB[i] + YB[IP1])
+
+        S[i] = math.sqrt(math.pow(XB[IP1] - XB[i],2) + math.pow(YB[IP1] - YB[i],2))
+
+        theta[i] = math.atan2(YB[IP1] - YB[i], XB[IP1] - XB[i])
+
+        RHS[i,1] = math.sin(theta[i] - alpha)
+
+
+    CN1 = np.zeros(M,M)
+    CN2 = np.zeros(M,M)
+    CT1 = np.zeros(M,M)
+    CT2 = np.zeros(M,M)
+    An = np.zeros(MP1)
+    At = np.zeros(MP1)
+
+
+    for i in range(M):
+        for j in range(M):
+
+            if (i == j):
+                CN1[i,j] = -1
+                CN2[i,j] = 1
+                CT1[i,j] = 0.5 * math.pi
+                CT2[i,j] = 0.5 * math.pi
+            else:
+                A = -1*(X[i]-XB[j])*math.cos(theta[j])-(Y[i]-YB[j])*math.sin(theta[j])
+                B = (X[i]-XB[j])**2+(Y[i]-YB[j])**2
+                C = math.sin(theta[i]-theta[j])
+                D = math.cos(theta[i]-theta[j])
+                E = (X[i]-XB[j])*math.sin(theta[j])-(Y[i]-YB[j])*math.cos(theta[j])
+                F = math.log(1+S[j]*(S[j]+2*A)/B)
+                G = math.atan2((E*S[j]),(B+A*S[j]))
+                P = (X[i]-XB[j])*math.sin(theta[i]-2*theta[j])+(Y[i]-YB[j])*math.cos(theta[i]-2*theta[j])
+                Q = (X[i]-XB[j])*math.cos(theta[i]-2*theta[j])-(Y[i]-YB[j])*math.sin(theta[i]-2*theta[j])
+
+                CN2[i,j] = D + 0.5 * Q * F/S[j] - (A*C + D*E) * G/S[j]
+                CN1[i,j] = 0.5*D*F + C*G - CN2[i,j]
+                CT2[i,j] = C + 0.5*P*F/S[j] + (A*D - C*E) * G/S[j]
+                CT1[i,j] = 0.5*C*F - D*G - CT2[i,j]
+
+    for i in range(M):
+        An[i,1] = CN1[i,1]
+        An[i,MP1] = CN1[i,1]
+        At[i,1] = CT1[i,1]
+        At[i,MP1] = CT2[i,M]
+
+        for j in range(1,M):
+            An[i,j] = CN1[i,j] + CN2[i,(j-1)]
+            At[i,j] = CT1[i,j] + CT2[i,(j-1)]
+
+    # Trailing edge conditions
+    An[MP1,1] = 1
+    An[MP1,MP1] = 1
+
+    for j = range(1,M):
+        An(MP1,j) = 0
+
+    RHS(MP1) = 0
+
+    gamma = np.linalg.solve(An,RHS)
+
+    V = np.zeros(1,M)
+    Cp = zeros(1,M)
+
+
+    for i in range(M):
+        V[i] = math.cos(theta[i] - alpha)
+
+        for j in range(MP1):
+            V[i] = V[i] + At[i,j]*gamma[j]
+            C[i] = 1 - (V[i])**2
+
+    cl = coeffLift(V,S,M)
+
+    CpLower = Cp[:M/2]
+    CpUpper = Cp[M/2:]
+
+    if (PLOT):
+        """ TODO: Plotting """
+
+
+
+
+
+
+
 
 def NACAAirfoil(m,p,t,c,N=100,PLOT=False):
     """ Computes the x-y locations of a 2-D NACA Airfoil"""
