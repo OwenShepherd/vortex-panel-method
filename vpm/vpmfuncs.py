@@ -3,7 +3,37 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def CalculatePanelCoefficients(XB, YB, M, alpha, NACA, PLOT, color):
+
+
+def Calculate_LiftCoefficients(V,S,M):
+    """
+    Function: Calculate_LiftCoefficients
+
+    Purpose: This function computes the coefficient of lift for an airfoil as to
+    be used in the vortex panel method "Calculate_PanelCoefficients"
+
+    Parameters:
+        V - The dimensionlesss velocity at each control point
+        S - The dimensionless length of each of the control points
+        M - The number of panels
+
+    Returns:
+        cl - The coefficient of lift
+    """
+
+    gamma = 0
+    for j in range(M):
+        gamma = gamma + V[j]*S[j]
+
+    cl = 2*gamma
+
+    return cl
+
+
+
+
+
+def Calculate_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT, color):
     """
     Function: CalculatePanelCoefficients
     Purpose: Formulates the system of equations for the vortex paneling method.
@@ -109,7 +139,7 @@ def CalculatePanelCoefficients(XB, YB, M, alpha, NACA, PLOT, color):
             V[i] = V[i] + At[i,j]*gamma[j]
             C[i] = 1 - (V[i])**2
 
-    cl = coeffLift(V,S,M)
+    cl = Calculate_LiftCoefficients(V,S,M)
 
     CpLower = Cp[:M/2]
     CpUpper = Cp[M/2:]
