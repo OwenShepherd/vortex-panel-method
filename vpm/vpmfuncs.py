@@ -216,7 +216,7 @@ def Get_AirfoilCoordinates(m,p,t,c,N,PLOT):
                 dyc[0,i] = (m*(c-xb[i])/(1-p*p)*1/float(c)+-1*m/(1-p*p)*(1+xb[i])/(c-2*p))
 
     # Now we can define parameter zeta
-    zeta = [math.atan(k) for k in dyc]
+    zeta = [math.atan(k) for k in dyc[0]]
 
     XU = np.zeros((1,len(xb)))
     YU = np.zeros((1,len(xb)))
@@ -225,11 +225,11 @@ def Get_AirfoilCoordinates(m,p,t,c,N,PLOT):
 
     # Creating the upper and lower x,y locations
     for i in range(len(xb)):
-        XU[i] = (xb[i])
-        YU[i] = (yc[i]+yt[i]*math.cos(zeta[i]))
+        XU[0,i] = (xb[i])
+        YU[0,i] = (yc[0,i]+yt[i]*math.cos(zeta[i]))
 
-        XL[i] = (xb[i])
-        YL[i] = (yc[i]-yt[i]*math.cos(zeta[i]))
+        XL[0,i] = (xb[i])
+        YL[0,i] = (yc[0,i]-yt[i]*math.cos(zeta[i]))
 
 
 
@@ -239,7 +239,7 @@ def Get_AirfoilCoordinates(m,p,t,c,N,PLOT):
     np.delete(XU,0,-1)
     np.delete(YU,0,-1)
 
-    concatenate((XL,fliplr(XU)))
-    concatenate((YL,fliplr(YU)))
-
+    X = np.concatenate((XL,np.fliplr(XU)),1)
+    Y = np.concatenate((YL,np.fliplr(YU)),1)
+    input()
     return X,Y
