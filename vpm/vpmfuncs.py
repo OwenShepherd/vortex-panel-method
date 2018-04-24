@@ -146,7 +146,7 @@ def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT, color):
         """ TODO: Plotting """
 
 
-
+    return cl,Cp
 
 
 
