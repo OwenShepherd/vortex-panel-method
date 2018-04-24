@@ -10,16 +10,45 @@ def test_answer():
 
 
 def test_NACA0012():
-    script_path = sys.path[0]
-    relpath = '/tests/test_data/NACA0012.csv'
-    abspath = script_path + relpath
+    X = []
+    Y = []
+    cl = []
+    Cp = []
 
-    with open(abspath,'r') as csvfile:
+    m = 0/100
+    p = 0/100
+    t = 12/100
+    c = 1
+    N = 100
+
+
+    relpath = sys.path[0] + '/tests/test_data/NACA0012.csv'
+    with open(relpath,'r') as csvfile:
         spamreader = csv.reader(csvfile,delimiter=',')
-        
+        for row in spamreader:
+            if (X == []):
+                X = row
+            elif (Y == []):
+                Y = row
+            elif (cl == []):
+                cl = row
+            elif (Cp == []):
+                Cp = row
 
+    # Conversion to numpy arrays
+    npX = np.array(X)
+    npX = npX.astype(npX)
+    npY = np.array(Y)
+    npY = npY.astype(npY)
+    npcl = float(cl[0])
+    npCp = np.array(Cp)
+    npCp = npCp.astype(np.float)
 
+    XTest, YTest = Get_AirfoilCoordinates(m,p,t,c,N,False)
 
+    print(X)
+    input()
+    print(XTest)
 
 
 
