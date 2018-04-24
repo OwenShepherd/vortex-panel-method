@@ -1,13 +1,13 @@
 import os.path
 import sys
+import csv
+import numpy as np
 
-def func(x):
-    return (x+1)
+scriptDir = sys.path[0]
+filepath = os.path.abspath(os.path.join(scriptDir,".."))
+sys.path.insert(0,filepath)
 
-
-def test_answer():
-    assert func(3) == 5
-
+from vpm.vpmfuncs import *
 
 def test_NACA0012():
     X = []
@@ -37,19 +37,18 @@ def test_NACA0012():
 
     # Conversion to numpy arrays
     npX = np.array(X)
-    npX = npX.astype(npX)
+    npX = npX.astype(np.float)
     npY = np.array(Y)
-    npY = npY.astype(npY)
+    npY = npY.astype(np.float)
     npcl = float(cl[0])
     npCp = np.array(Cp)
     npCp = npCp.astype(np.float)
 
     XTest, YTest = Get_AirfoilCoordinates(m,p,t,c,N,False)
-
-    print(X)
-    input()
-    print(XTest)
-
+    XTest = np.around(XTest,decimals=5)
+    npX = np.around(npX,decimals=5)
+    for i in range(len(npX)):
+        assert(XTest[i] == npX[i])
 
 
 
@@ -57,7 +56,3 @@ class TestClass(object):
     def test_one(self):
         x = 'this'
         assert 'h' in x
-
-    def test_two(self):
-        x = 'hello'
-        assert hasattr(x, 'check')
