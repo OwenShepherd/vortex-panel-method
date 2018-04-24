@@ -46,6 +46,8 @@ def tester1():
     clTest, CpTest = Get_PanelCoefficients(XTest,YTest,N,alpha,'',False)
     XTest = np.around(XTest,decimals=5)
     npX = np.around(npX,decimals=5)
+    print("ClTest: " + str(clTest) + " CpTest: " + str(CpTest))
+    input()
     for i in range(len(npX)):
         if (XTest[i] != npX[i]):
             print("Index: " + str(i) + " Not Equal.")

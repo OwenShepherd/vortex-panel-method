@@ -56,11 +56,11 @@ def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT):
     MP1 = M+1 # The trailing edge requries an extra point
 
     """ TODO: Find better variable names for these arrays """
-    X = np.zeros((1,M))
-    Y = np.zeros((1,M))
-    RHS = np.zeros((M,1))
-    theta = np.zeros((1,M))
-    S = np.zeros((1,M))
+    X = np.zeros(M)
+    Y = np.zeros(M)
+    RHS = np.zeros(MP1)
+    theta = np.zeros(M)
+    S = np.zeros(M)
 
     for i in range(M):
         IP1 = i + 1
@@ -68,19 +68,18 @@ def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT):
         X[i] = 0.5 * (XB[i] + XB[IP1])
         Y[i] = 0.5 * (YB[i] + YB[IP1])
 
-        S[i] = math.sqrt(math.pow(XB[IP1] - XB[i],2) + math.pow(YB[IP1] - YB[i],2))
+        S[i] = math.sqrt(pow(XB[IP1] - XB[i],2) + pow(YB[IP1] - YB[i],2))
 
         theta[i] = math.atan2(YB[IP1] - YB[i], XB[IP1] - XB[i])
 
-        RHS[i,1] = math.sin(theta[i] - alpha)
-
+        RHS[i] = math.sin(theta[i] - alpha)
 
     CN1 = np.zeros((M,M))
     CN2 = np.zeros((M,M))
     CT1 = np.zeros((M,M))
     CT2 = np.zeros((M,M))
-    An = np.zeros((MP1))
-    At = np.zeros((MP1))
+    An = np.zeros((MP1,MP1))
+    At = np.zeros((MP1,MP1))
 
 
     for i in range(M):
@@ -109,27 +108,27 @@ def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT):
 
     for i in range(M):
         An[i,1] = CN1[i,1]
-        An[i,MP1] = CN1[i,1]
+        An[i,MP1-1] = CN2[i,M-1]
         At[i,1] = CT1[i,1]
-        At[i,MP1] = CT2[i,M]
+        At[i,MP1-1] = CT2[i,M-1]
 
         for j in range(1,M):
             An[i,j] = CN1[i,j] + CN2[i,(j-1)]
             At[i,j] = CT1[i,j] + CT2[i,(j-1)]
 
     # Trailing edge conditions
-    An[MP1,1] = 1
-    An[MP1,MP1] = 1
+    An[MP1-1,0] = 1
+    An[MP1-1,MP1-1] = 1
 
     for j in range(1,M):
-        An[MP1,j] = 0
+        An[MP1-1,j] = 0
 
-    RHS[MP1] = 0
+    RHS[MP1-1] = 0
 
     gamma = np.linalg.solve(An,RHS)
 
-    V = np.zeros((1,M))
-    Cp = zeros((1,M))
+    V = np.zeros(M)
+    Cp = np.zeros(M)
 
 
     for i in range(M):
@@ -137,12 +136,12 @@ def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT):
 
         for j in range(MP1):
             V[i] = V[i] + At[i,j]*gamma[j]
-            C[i] = 1 - (V[i])**2
+            Cp[i] = 1 - (V[i])**2
 
-    cl = Calculate_LiftCoefficients(V,S,M)
+    cl = Get_LiftCoefficients(V,S,M)
 
-    CpLower = Cp[:M/2]
-    CpUpper = Cp[M/2:]
+    CpLower = Cp[0:int(M/2)]
+    CpUpper = Cp[int(M/2):]
     Cp = Cp.astype(np.float)
 
     return cl,Cp
