@@ -73,12 +73,12 @@ def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT, color):
         RHS[i,1] = math.sin(theta[i] - alpha)
 
 
-    CN1 = np.zeros(M,M)
-    CN2 = np.zeros(M,M)
-    CT1 = np.zeros(M,M)
-    CT2 = np.zeros(M,M)
-    An = np.zeros(MP1)
-    At = np.zeros(MP1)
+    CN1 = np.zeros((M,M))
+    CN2 = np.zeros((M,M))
+    CT1 = np.zeros((M,M))
+    CT2 = np.zeros((M,M))
+    An = np.zeros((MP1))
+    At = np.zeros((MP1))
 
 
     for i in range(M):
@@ -119,15 +119,15 @@ def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT, color):
     An[MP1,1] = 1
     An[MP1,MP1] = 1
 
-    for j = range(1,M):
-        An(MP1,j) = 0
+    for j in range(1,M):
+        An[MP1,j] = 0
 
-    RHS(MP1) = 0
+    RHS[MP1] = 0
 
     gamma = np.linalg.solve(An,RHS)
 
-    V = np.zeros(1,M)
-    Cp = zeros(1,M)
+    V = np.zeros((1,M))
+    Cp = zeros((1,M))
 
 
     for i in range(M):
@@ -152,7 +152,7 @@ def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT, color):
 
 
 
-def Get_AirfoilCoordinates(m,p,t,c,N=100,PLOT=False):
+def Get_AirfoilCoordinates(m,p,t,c,N,PLOT):
     """
     Function: Get_AirfoilCoordinates
 
@@ -203,33 +203,33 @@ def Get_AirfoilCoordinates(m,p,t,c,N=100,PLOT=False):
 
 
     # Here we can determine the mean camber line
-    yc = np.zeros(1,len(xb))
-    dyc = np.zeros(1,len(xb))
+    yc = np.zeros((1,len(xb)))
+    dyc = np.zeros((1,len(xb)))
 
-
-    for i in range(len(xb)):
-        if (xb[i]<=(p*c)):
-            yc[1,i] = (m*xb[i]/(p**2)*(2*p-xb[i]/c))
-            dyc[1,i] = (m*xb[i]/(p**2)*(-1/float(c))+m/(p**2)*(2*p-xb[i]/c))
-        else:
-            yc[1,i] = (m*(c-xb[i])/(1-p*p)*(1+xb[i]/c-2*p))
-            dyc[1,i] = (m*(c-xb[i])/(1-p*p)*1/float(c)+-1*m/(1-p*p)*(1+xb[i])/(c-2*p))
+    if ((p!=0) or (m!=0)):
+        for i in range(len(xb)):
+            if (xb[i]<=(p*c)):
+                yc[0,i] = (m*xb[i]/(p**2)*(2*p-xb[i]/c))
+                dyc[0,i] = (m*xb[i]/(p**2)*(-1/float(c))+m/(p**2)*(2*p-xb[i]/c))
+            else:
+                yc[0,i] = (m*(c-xb[i])/(1-p*p)*(1+xb[i]/c-2*p))
+                dyc[0,i] = (m*(c-xb[i])/(1-p*p)*1/float(c)+-1*m/(1-p*p)*(1+xb[i])/(c-2*p))
 
     # Now we can define parameter zeta
     zeta = [math.atan(k) for k in dyc]
 
-    XU = np.zeros(1,len(xb))
-    YU = np.zeros(1,len(xb))
-    XL = np.zeros(1,len(xb))
-    YL = np.zeros(1,len(xb))
+    XU = np.zeros((1,len(xb)))
+    YU = np.zeros((1,len(xb)))
+    XL = np.zeros((1,len(xb)))
+    YL = np.zeros((1,len(xb)))
 
     # Creating the upper and lower x,y locations
     for i in range(len(xb)):
-        XU[i] = (xb[x])
-        YU[i] = (yc[x]+yt[x]*math.cos(zeta[x]))
+        XU[i] = (xb[i])
+        YU[i] = (yc[i]+yt[i]*math.cos(zeta[i]))
 
-        XL[i] = (xb[x])
-        YL[i] = (yc[x]-yt[x]*math.cos(zeta[x]))
+        XL[i] = (xb[i])
+        YL[i] = (yc[i]-yt[i]*math.cos(zeta[i]))
 
 
 

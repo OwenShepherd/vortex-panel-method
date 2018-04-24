@@ -2,7 +2,9 @@ import csv
 import os.path
 import sys
 import numpy as np
+sys.path.insert(0,os.path.abspath(sys.path[0]))
 
+from vpm.vpmfuncs import *
 
 
 def tester1():
