@@ -1,6 +1,8 @@
+from __future__ import division
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+import pdb
 
 
 
@@ -177,8 +179,8 @@ def Get_AirfoilCoordinates(m,p,t,c,N,PLOT):
 
     # Creating some control values and storage variables
     NOTDONE = True
-    th = []
-    th.append(0)
+    th = [0] * int(N/2+1)
+    th[0] = 0
     i = 1
 
     # Want angles to go from zero to pi and split the boundary x-y locations
@@ -187,10 +189,10 @@ def Get_AirfoilCoordinates(m,p,t,c,N,PLOT):
         value = th[i-1] + dt
 
         if (abs(value-math.pi)<=0.0000001):
-            th.append(value)
+            th[i] = value
             NOTDONE = False
         else:
-            th.append(value)
+            th[i] = value
             i = i+1
 
     # Now here we determine the x-lcations based off of the thetas
@@ -199,8 +201,7 @@ def Get_AirfoilCoordinates(m,p,t,c,N,PLOT):
 
     # Now we shall determine the points of interest on the airfoil (the y-
     # locations)
-    yt = [t*c/0.2*(0.2969*math.sqrt(k/c)-0.1260*(k/c)-0.3516*(k/c)*(k/c)+0.2843*(k/c)**3-0.1036**4) for k in xb]
-
+    yt = [t*c/0.2*(0.2969*pow((k/c),0.5)-0.1260*(k/c)-0.3516*pow((k/c),2)+0.2843*pow((k/c),3)-0.1036*pow(k/c,4)) for k in xb]
 
     # Here we can determine the mean camber line
     yc = np.zeros((1,len(xb)))
@@ -209,14 +210,18 @@ def Get_AirfoilCoordinates(m,p,t,c,N,PLOT):
     if ((p!=0) or (m!=0)):
         for i in range(len(xb)):
             if (xb[i]<=(p*c)):
-                yc[0,i] = (m*xb[i]/(p**2)*(2*p-xb[i]/c))
-                dyc[0,i] = (m*xb[i]/(p**2)*(-1/float(c))+m/(p**2)*(2*p-xb[i]/c))
+                yc[0,i] = (m*xb[i]/(pow(p,2))*(2*p-xb[i]/c))
+                dyc[0,i] = (m*xb[i]/(pow(p,2))*(-1/float(c))+m/(pow(p,2))*(2*p-xb[i]/c))
+
             else:
-                yc[0,i] = (m*(c-xb[i])/(1-p*p)*(1+xb[i]/c-2*p))
-                dyc[0,i] = (m*(c-xb[i])/(1-p*p)*1/float(c)+-1*m/(1-p*p)*(1+xb[i])/(c-2*p))
+                yc[0,i] = m*(c-xb[i])/((1-p)**2)*(1+xb[i]/c-2*p)
+                dyc[0,i] = (m*(c-xb[i])/(1-p*p))*1/float(c)+(-1*m)/(1-p*p)*(1+xb[i]/c-2*p)
+
 
     # Now we can define parameter zeta
     zeta = [math.atan(k) for k in dyc[0]]
+
+
 
     XU = np.zeros((1,len(xb)))
     YU = np.zeros((1,len(xb)))
@@ -230,6 +235,10 @@ def Get_AirfoilCoordinates(m,p,t,c,N,PLOT):
 
         XL[0,i] = (xb[i])
         YL[0,i] = (yc[0,i]-yt[i]*math.cos(zeta[i]))
+        # if (t != 0.12):
+        #     pdb.set_trace()
+
+    #pdb.set_trace()
 
 
 

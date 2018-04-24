@@ -51,10 +51,19 @@ def tester1():
             print("XTest: " + str(XTest[i]) + " npX: " + str(npX[i]))
             input()
 
+def StringExtractor():
+    testString = 'NACA0012'
+    Data = []
+    for i in range(4,len(testString)-1):
+        if (i <= 5):
+            Data.append(float(testString[i]))
+        else:
+            Data.append(float(testString[i] + testString[i+1]))
 
+    print(Data)
 
 def main():
-    tester1()
+    StringExtractor()
 
 
 if __name__ == "__main__":

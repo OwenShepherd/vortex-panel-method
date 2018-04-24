@@ -1,1 +1,3 @@
-{}
+{
+  "tests/test_vpm.py::test_NACA1408": true
+}

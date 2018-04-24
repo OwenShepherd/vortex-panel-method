@@ -9,20 +9,27 @@ sys.path.insert(0,filepath)
 
 from vpm.vpmfuncs import *
 
-def test_NACA0012():
+def Data_Comparison(NACA_Name):
     X = []
     Y = []
     cl = []
     Cp = []
+    airfoil_parameters = []
 
-    m = 0/100
-    p = 0/100
-    t = 12/100
+    for i in range(4,len(NACA_Name)-1):
+        if (i <= 5):
+            airfoil_parameters.append(float(NACA_Name[i]))
+        else:
+            airfoil_parameters.append(float(NACA_Name[i] + NACA_Name[i+1]))
+
+    m = airfoil_parameters[0]/100
+    p = airfoil_parameters[1]/100
+    t = airfoil_parameters[2]/100
     c = 1
     N = 100
 
+    relpath = sys.path[0] + '/tests/test_data/' + NACA_Name + '.csv'
 
-    relpath = sys.path[0] + '/tests/test_data/NACA0012.csv'
     with open(relpath,'r') as csvfile:
         spamreader = csv.reader(csvfile,delimiter=',')
         for row in spamreader:
@@ -45,14 +52,23 @@ def test_NACA0012():
     npCp = npCp.astype(np.float)
 
     XTest, YTest = Get_AirfoilCoordinates(m,p,t,c,N,False)
-    XTest = np.around(XTest,decimals=5)
-    npX = np.around(npX,decimals=5)
-    for i in range(len(npX)):
-        assert(XTest[i] == npX[i])
+    XTest = np.around(XTest,decimals=4)
+    npX = np.around(npX,decimals=4)
+    YTest = np.around(YTest,decimals=4)
+    npY = np.around(npY,decimals=4)
 
+    return XTest, YTest, npX, npY
 
+def test_NACA0012():
+    testName = 'NACA0012'
+    XPy, YPy, XMat, YMat = Data_Comparison(testName)
+    for i in range(len(XPy)):
+        assert(abs(XPy[i]-XMat[i])<=0.001)
+        assert(abs(YPy[i]-YMat[i])<=0.001)
 
-class TestClass(object):
-    def test_one(self):
-        x = 'this'
-        assert 'h' in x
+def test_NACA1408():
+    testName = 'NACA1408'
+    XPy, YPy, XMat, YMat = Data_Comparison(testName)
+    for i in range(len(XPy)):
+        assert(abs(XPy[i]-XMat[i])<=0.001)
+        assert(abs(YPy[i]-YMat[i])<=0.001)
