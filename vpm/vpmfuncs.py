@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 
 
-def Calculate_LiftCoefficients(V,S,M):
+def Get_LiftCoefficients(V,S,M):
     """
     Function: Calculate_LiftCoefficients
 
@@ -31,9 +31,7 @@ def Calculate_LiftCoefficients(V,S,M):
 
 
 
-
-
-def Calculate_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT, color):
+def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT, color):
     """
     Function: CalculatePanelCoefficients
     Purpose: Formulates the system of equations for the vortex paneling method.
@@ -154,9 +152,25 @@ def Calculate_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT, color):
 
 
 
-def NACAAirfoil(m,p,t,c,N=100,PLOT=False):
-    """ Computes the x-y locations of a 2-D NACA Airfoil"""
+def Get_AirfoilCoordinates(m,p,t,c,N=100,PLOT=False):
+    """
+    Function: Get_AirfoilCoordinates
 
+    Purpose: Calculates the points on a NACA 4-digit series airfoil.
+
+    Parameters:
+        m - The maximum camber
+        p - The location of the maximum camber
+        t - The thickness
+        c - The chord length
+        N - The number of employed panels
+        PLOT - Whether or not to plot Cp vs. x/c; if the plot is desired,
+            PLOT == 1
+
+    Returns:
+        X - The x-locations on the airfoil
+        Y - The y-locations on the airfoil
+    """
 
     # Splitting the airfoil into equal-length x-locations ALA K&C
     dt = 2*math.pi/N
@@ -185,50 +199,47 @@ def NACAAirfoil(m,p,t,c,N=100,PLOT=False):
 
     # Now we shall determine the points of interest on the airfoil (the y-
     # locations)
-    yt = [t*c/0.2*(0.2969*math.sqrt(k/c)-0.1260*(k/c)-0.3516*(k/c)*(k/c)+0.2843*pow(k/c,3)-0.1036*pow(k/c,4)) for k in xb]
+    yt = [t*c/0.2*(0.2969*math.sqrt(k/c)-0.1260*(k/c)-0.3516*(k/c)*(k/c)+0.2843*(k/c)**3-0.1036**4) for k in xb]
 
 
     # Here we can determine the mean camber line
-    yc = []
-    dyc = []
+    yc = np.zeros(1,len(xb))
+    dyc = np.zeros(1,len(xb))
 
-    for x in xb:
-        if (x<=(p*c) and p!=0):
-            yc.append(m*x/pow(p,2)*(2*p-x/c))
-            dyc.append(m*x/pow(p,2)*(-1/float(c))+m/pow(p,2)*(2*p-x/c))
+
+    for i in range(len(xb)):
+        if (xb[i]<=(p*c)):
+            yc[1,i] = (m*xb[i]/(p**2)*(2*p-xb[i]/c))
+            dyc[1,i] = (m*xb[i]/(p**2)*(-1/float(c))+m/(p**2)*(2*p-xb[i]/c))
         else:
-            yc.append(m*(c-x)/(1-p*p)*(1+x/c-2*p))
-            dyc.append(m*(c-x)/(1-p*p)*1/float(c)+-1*m/(1-p*p)*(1+x)/(c-2*p))
+            yc[1,i] = (m*(c-xb[i])/(1-p*p)*(1+xb[i]/c-2*p))
+            dyc[1,i] = (m*(c-xb[i])/(1-p*p)*1/float(c)+-1*m/(1-p*p)*(1+xb[i])/(c-2*p))
 
     # Now we can define parameter zeta
     zeta = [math.atan(k) for k in dyc]
 
-
-
-    XU = []
-    YU = []
-    XL = []
-    YL = []
+    XU = np.zeros(1,len(xb))
+    YU = np.zeros(1,len(xb))
+    XL = np.zeros(1,len(xb))
+    YL = np.zeros(1,len(xb))
 
     # Creating the upper and lower x,y locations
-    for x in range(0,len(xb)):
-        XU.append(xb[x])
-        YU.append(yc[x]+yt[x]*math.cos(zeta[x]))
+    for i in range(len(xb)):
+        XU[i] = (xb[x])
+        YU[i] = (yc[x]+yt[x]*math.cos(zeta[x]))
 
-        XL.append(xb[x])
-        YL.append(yc[x]-yt[x]*math.cos(zeta[x]))
+        XL[i] = (xb[x])
+        YL[i] = (yc[x]-yt[x]*math.cos(zeta[x]))
 
 
 
     # This ensures that the boundary points go from the trailing edge, clockwise
     # back to the trailing edge with two boundary points at the trailing edge
     # and one at the leading edge
-    XU.pop()
-    YU.pop()
+    np.delete(XU,0,-1)
+    np.delete(YU,0,-1)
 
-
-    X = XL+list(reversed(XU))
-    Y = YL+list(reversed(YU))
-
+    concatenate((XL,fliplr(XU)))
+    concatenate((YL,fliplr(YU)))
 
     return X,Y
