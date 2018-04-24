@@ -236,10 +236,14 @@ def Get_AirfoilCoordinates(m,p,t,c,N,PLOT):
     # This ensures that the boundary points go from the trailing edge, clockwise
     # back to the trailing edge with two boundary points at the trailing edge
     # and one at the leading edge
-    np.delete(XU,0,-1)
-    np.delete(YU,0,-1)
+    XU = np.delete(XU,-1)
+    YU = np.delete(YU,-1)
+    XU = XU[::-1]
+    YU = YU[::-1]
+    XL = XL[0,:]
+    YL = YL[0,:]
 
-    X = np.concatenate((XL,np.fliplr(XU)),1)
-    Y = np.concatenate((YL,np.fliplr(YU)),1)
-    input()
+    X = np.concatenate([XL,XU])
+    Y = np.concatenate([YL,YU])
+
     return X,Y

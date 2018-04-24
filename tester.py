@@ -43,10 +43,13 @@ def tester1():
     npCp = npCp.astype(np.float)
 
     XTest, YTest = Get_AirfoilCoordinates(m,p,t,c,N,False)
-
-    print(X)
-    input()
-    print(XTest)
+    XTest = np.around(XTest,decimals=5)
+    npX = np.around(npX,decimals=5)
+    for i in range(len(npX)):
+        if (XTest[i] != npX[i]):
+            print("Index: " + str(i) + " Not Equal.")
+            print("XTest: " + str(XTest[i]) + " npX: " + str(npX[i]))
+            input()
 
 
 
