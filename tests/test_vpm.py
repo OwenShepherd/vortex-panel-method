@@ -9,12 +9,49 @@ sys.path.insert(0,filepath)
 
 from vpm.vpmfuncs import *
 
+def test_NACA0012():
+    testName = 'NACA0012'
+    XPy, YPy, XMat, YMat = Data_Comparison(testName)
+    for i in range(len(XPy)):
+        assert(abs(XPy[i]-XMat[i])<=0.001)
+        assert(abs(YPy[i]-YMat[i])<=0.001)
+
+def test_NACA1408():
+    testName = 'NACA1408'
+    XPy, YPy, XMat, YMat = Data_Comparison(testName)
+    for i in range(len(XPy)):
+        assert(abs(XPy[i]-XMat[i])<=0.001)
+        assert(abs(YPy[i]-YMat[i])<=0.001)
+
+def test_NACA2410():
+    testName = 'NACA2410'
+    XPy, YPy, XMat, YMat = Data_Comparison(testName)
+    for i in range(len(XPy)):
+        assert(abs(XPy[i]-XMat[i])<=0.001)
+        assert(abs(YPy[i]-YMat[i])<=0.001)
+
+def test_NACA4415():
+    testName = 'NACA4415'
+    XPy, YPy, XMat, YMat = Data_Comparison(testName)
+    for i in range(len(XPy)):
+        assert(abs(XPy[i]-XMat[i])<=0.001)
+        assert(abs(YPy[i]-YMat[i])<=0.001)
+
+def test_NACA6412():
+    testName = 'NACA6412'
+    XPy, YPy, XMat, YMat = Data_Comparison(testName)
+    for i in range(len(XPy)):
+        assert(abs(XPy[i]-XMat[i])<=0.001)
+        assert(abs(YPy[i]-YMat[i])<=0.001)
+
+
 def Data_Comparison(NACA_Name):
     X = []
     Y = []
     cl = []
     Cp = []
     airfoil_parameters = []
+    alpha = 1
 
     for i in range(4,len(NACA_Name)-1):
         if (i <= 5):
@@ -52,23 +89,10 @@ def Data_Comparison(NACA_Name):
     npCp = npCp.astype(np.float)
 
     XTest, YTest = Get_AirfoilCoordinates(m,p,t,c,N,False)
+    cl, Cp = Get_PanelCoefficients(XTest,YTest,N,alpha,'',False)
     XTest = np.around(XTest,decimals=4)
     npX = np.around(npX,decimals=4)
     YTest = np.around(YTest,decimals=4)
     npY = np.around(npY,decimals=4)
 
     return XTest, YTest, npX, npY
-
-def test_NACA0012():
-    testName = 'NACA0012'
-    XPy, YPy, XMat, YMat = Data_Comparison(testName)
-    for i in range(len(XPy)):
-        assert(abs(XPy[i]-XMat[i])<=0.001)
-        assert(abs(YPy[i]-YMat[i])<=0.001)
-
-def test_NACA1408():
-    testName = 'NACA1408'
-    XPy, YPy, XMat, YMat = Data_Comparison(testName)
-    for i in range(len(XPy)):
-        assert(abs(XPy[i]-XMat[i])<=0.001)
-        assert(abs(YPy[i]-YMat[i])<=0.001)

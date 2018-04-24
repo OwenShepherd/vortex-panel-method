@@ -11,14 +11,14 @@ def tester1():
     X = []
     Y = []
     cl = []
-    Cp = []
 
     m = 0/100
     p = 0/100
     t = 12/100
     c = 1
     N = 100
-
+    alpha = 1
+    Cp = []
 
     relpath = sys.path[0] + '/tests/test_data/NACA0012.csv'
     with open(relpath,'r') as csvfile:
@@ -43,6 +43,7 @@ def tester1():
     npCp = npCp.astype(np.float)
 
     XTest, YTest = Get_AirfoilCoordinates(m,p,t,c,N,False)
+    clTest, CpTest = Get_PanelCoefficients(XTest,YTest,N,alpha,'',False)
     XTest = np.around(XTest,decimals=5)
     npX = np.around(npX,decimals=5)
     for i in range(len(npX)):
@@ -63,7 +64,7 @@ def StringExtractor():
     print(Data)
 
 def main():
-    StringExtractor()
+    tester1()
 
 
 if __name__ == "__main__":

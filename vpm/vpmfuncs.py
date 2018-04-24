@@ -33,7 +33,7 @@ def Get_LiftCoefficients(V,S,M):
 
 
 
-def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT, color):
+def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT):
     """
     Function: CalculatePanelCoefficients
     Purpose: Formulates the system of equations for the vortex paneling method.
@@ -143,10 +143,7 @@ def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT, color):
 
     CpLower = Cp[:M/2]
     CpUpper = Cp[M/2:]
-
-    if (PLOT):
-        """ TODO: Plotting """
-
+    Cp = Cp.astype(np.float)
 
     return cl,Cp
 
