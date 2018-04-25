@@ -8,7 +8,7 @@ import pdb
 
 
 
-def Plot_PressureCoefficients(X,Y,CpUpper,CpLower,M):
+def Plot_PressureCoefficients(X,Y,CpUpper,CpLower,M,FigID):
     """
     Function: Plot_PressureCoefficients
 
@@ -24,14 +24,18 @@ def Plot_PressureCoefficients(X,Y,CpUpper,CpLower,M):
     xUpper = X[int(M/2):]
     xLower = X[0:int(M/2)]
 
-    plt.figure(1)
-    plt.plot(xUpper,CpUpper,'s')
-    plt.plot(xLower,CpLower,'x')
+    plt.figure(FigID.number)
+    plt.plot(xUpper,CpUpper,'-+',color='#0066ff')
+    plt.plot(xLower,CpLower,'-x',color='#0066ff')
+    plt.plot(1.2,0,'+',color='#7d7d7d',visible=True, label='Upper Surface')
+    plt.plot(1.2,0,'x',color='#7d7d7d',visible=True, label='Lower Surface')
+    plt.xlim(-0.1,1.1)
+    plt.legend()
     plt.xlabel("Dimensionless Chord Location [X/C]")
     plt.ylabel("Pressure Coefficient, Cp")
-    plt.gca().invert_yaxis()
     #pdb.set_trace()
-    plt.show()
+
+
 
 
 def Get_ParsedData(name):
@@ -94,7 +98,7 @@ def Get_LiftCoefficients(V,S,M):
 
 
 
-def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT):
+def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT, FigID):
     """
     Function: CalculatePanelCoefficients
     Purpose: Formulates the system of equations for the vortex paneling method.
@@ -207,7 +211,7 @@ def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT):
     newcl = newcl.astype(np.float)
 
     if (PLOT):
-        Plot_PressureCoefficients(X,Y,CpUpper,CpLower,M)
+        Plot_PressureCoefficients(X,Y,CpUpper,CpLower,M,FigID)
 
     return newcl,Cp
 

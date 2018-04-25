@@ -2,6 +2,7 @@ import csv
 import os.path
 import sys
 import numpy as np
+import matplotlib as plt
 sys.path.insert(0,os.path.abspath(sys.path[0]))
 
 from vpm.vpmfuncs import *
@@ -66,12 +67,17 @@ def StringExtractor():
 
 def Plotting_Tester():
     name = 'NACA0012'
+    coeffFIG = plt.figure()
     c = 1
     N = 100
     m,p,t = Get_ParsedData(name)
     alpha = 5
     X, Y = Get_AirfoilCoordinates(m,p,t,c,N,False)
-    cl, Cp = Get_PanelCoefficients(X,Y,N,alpha,'',True)
+    cl, Cp = Get_PanelCoefficients(X,Y,N,alpha,'',True,coeffFIG)
+    alpha = 2
+    cl, Cp = Get_PanelCoefficients(X,Y,N,alpha,'',True,coeffFIG)
+    plt.gca().invert_yaxis()    
+    plt.show()
 
 
 def main():
