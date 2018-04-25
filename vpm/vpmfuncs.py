@@ -7,6 +7,19 @@ import pdb
 
 class Airfoil:
     def __init__(self,name,c,N,alpha,FigID=None,plotColor=None):
+        """
+        Function: Airfoil Constructor
+
+        Purpose: This function will convert the standard name of a naca airfoil
+        (ex: "NACA0012" or "NACA1408", etc) into its corresponding parameters.
+
+        Parameters:
+            c - chord length
+            N - Number of samples
+            alpha - The angle of attack [degrees]
+            FigID - The matplotlib figure identifier
+            plotColor - The matplotlib color desired if plotting
+        """
         self.NACA_ID = name
         self.chord = c
         self.NUM_SAMPLES = N
@@ -16,16 +29,59 @@ class Airfoil:
         self.HASPLOT = {}
         if (FigID != None):
             self.HASPLOT[str(self.Figure_To_Plot.number)] = False
+        self.max_camber = None
+        self.position_maxCamber = None
+        self.thickness = None
+        self.BoundaryPoints_X = None
+        self.BoundaryPoints_Y = None
+        self.full_coefficientLift = None
+        self.pressure_coefficient = None
+
 
     def Set_Figure(self,FigID):
+        """
+        Function: Set_Figure
+
+        Purpose: Changes the figure identifier for the class.
+
+        Parameters:
+            FigID - The new matplotlibfigure identifier
+
+        Returns:
+            none
+        """
         self.Figure_To_Plot = FigID
         if (self.Figure_To_Plot.number not in self.HASPLOT):
             self.HASPLOT[str(self.Figure_To_Plot.number)] = False
 
     def Set_PlotColor(self,plotColor):
+        """
+        Function: Set_PlotColor
+
+        Purpose: Changes the the current plot color for the class.
+
+        Parameters:
+            plotColor - The new matplotlib plot color
+
+        Returns:
+            none
+        """
+
         self.PlotColor = plotColor
 
     def Set_AngleOfAttack(self,alpha):
+        """
+        Function: Set_AngleOfAttack
+
+        Purpose: Changes the angle of attack for the class.
+
+        Parameters:
+            alpha - The new angle of attack
+            
+        Returns:
+            none
+        """
+
         self.angle_of_attack = alpha
 
     def Get_ParsedData(self):
@@ -207,8 +263,8 @@ class Airfoil:
         plt.figure(FigID.number)
 
         if not self.HASPLOT[str(FigID.number)]:
-            plt.plot(1.2,0,'+',color='#7d7d7d',visible=True, label='Upper Surface')
-            plt.plot(1.2,0,'x',color='#7d7d7d',visible=True, label='Lower Surface')
+            plt.plot(1.2,0,'|',color='#7d7d7d',visible=True, label='Upper Surface',markersize=7)
+            plt.plot(1.2,0,'2',color='#7d7d7d',visible=True, label='Lower Surface',markersize=7)
             plt.grid(FigID)
             temp_gca = plt.gca()
             temp_gca.invert_yaxis()

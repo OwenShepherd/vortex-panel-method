@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import csv
 import os.path
 import sys
@@ -94,7 +96,7 @@ def Plotting_Tester():
     plt.show()
 
 def exampleTester():
-    example_NoPlot()
+    example_NACA0012()
 
 
 
