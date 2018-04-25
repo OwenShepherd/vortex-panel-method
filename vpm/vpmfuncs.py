@@ -27,7 +27,10 @@ def Get_LiftCoefficients(V,S,M):
     for j in range(M):
         gamma = gamma + V[j]*S[j]
 
-    cl = 2*gamma
+    cl = []
+    cl.append(2*gamma)
+
+
 
     return cl
 
@@ -107,9 +110,9 @@ def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT):
                 CT1[i,j] = 0.5*C*F - D*G - CT2[i,j]
 
     for i in range(M):
-        An[i,1] = CN1[i,1]
+        An[i,0] = CN1[i,0]
         An[i,MP1-1] = CN2[i,M-1]
-        At[i,1] = CT1[i,1]
+        At[i,0] = CT1[i,0]
         At[i,MP1-1] = CT2[i,M-1]
 
         for j in range(1,M):
@@ -126,7 +129,6 @@ def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT):
     RHS[MP1-1] = 0
 
     gamma = np.linalg.solve(An,RHS)
-
     V = np.zeros(M)
     Cp = np.zeros(M)
 
@@ -143,8 +145,9 @@ def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT):
     CpLower = Cp[0:int(M/2)]
     CpUpper = Cp[int(M/2):]
     Cp = Cp.astype(np.float)
-
-    return cl,Cp
+    newcl = np.array(cl)
+    newcl = newcl.astype(np.float)
+    return newcl,Cp
 
 
 
