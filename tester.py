@@ -1,11 +1,14 @@
+#!/usr/bin/env python3
+
 import csv
 import os.path
 import sys
 import numpy as np
+import matplotlib as plt
 sys.path.insert(0,os.path.abspath(sys.path[0]))
 
 from vpm.vpmfuncs import *
-
+from vpm.examples import *
 
 def tester1():
     X = []
@@ -47,7 +50,6 @@ def tester1():
     XTest = np.around(XTest,decimals=5)
     npX = np.around(npX,decimals=5)
     print("ClTest: " + str(clTest) + " CpTest: " + str(CpTest))
-    input()
     for i in range(len(npX)):
         if (XTest[i] != npX[i]):
             print("Index: " + str(i) + " Not Equal.")
@@ -65,8 +67,41 @@ def StringExtractor():
 
     print(Data)
 
+def Plotting_Tester():
+    name = 'NACA0012'
+    plotColor = '#00ff08'
+    coeffFIG = plt.figure()
+    c = 1
+    N = 100
+    alpha = 5
+    plotColor = '#00ff08'
+    NACA0012 = Airfoil(name,c,N,alpha,coeffFIG,plotColor)
+    NACA0012.Get_ParsedData()
+    NACA0012.Get_AirfoilCoordinates()
+    NACA0012.Get_PanelCoefficients(True)
+    newFig = plt.figure()
+    alpha = 2
+    plotColor = '#ff1f00'
+    NACA0012.Get_ParsedData()
+    NACA0012.Set_AngleOfAttack(alpha)
+    NACA0012.Set_PlotColor(plotColor)
+    NACA0012.Set_Figure(newFig)
+    NACA0012.Get_PanelCoefficients(True)
+    alpha = 10
+    plotColor = '#0074ff'
+    NACA0012.Get_ParsedData()
+    NACA0012.Set_AngleOfAttack(alpha)
+    NACA0012.Set_PlotColor(plotColor)
+    NACA0012.Get_PanelCoefficients(True)
+    plt.show()
+
+def exampleTester():
+    example_NACA0012()
+
+
+
 def main():
-    tester1()
+    exampleTester()
 
 
 if __name__ == "__main__":
