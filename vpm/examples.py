@@ -2,6 +2,7 @@ import os.path
 import sys
 import numpy as np
 import matplotlib as plt
+import pdb
 sys.path.insert(0,os.path.abspath(sys.path[0]))
 
 from vpm.vpmfuncs import *
@@ -10,13 +11,7 @@ def example_NACA0012():
     """ Example plotting a NACA0012 at a few angles of attack.
 
     Will plot the pressure coefficients of a NACA0012 at three angles of attack
-    and each at a different color.
-
-    Args:
-        none
-
-    Returns:
-        none
+    (5, 2, 10) and each at a different color.
 
     """
 
@@ -48,15 +43,12 @@ def example_NACA0012():
 def example_NoPlot():
     """ Demonstrates how to use the airfoil class without plotting.
 
-    Purpose:
-        This function demonstrates how to use the airfoil class without
-        plotting anything.
-
-    Args:
-        none
+    This function demonstrates how to use the airfoil class without
+    plotting anything.
 
     Returns:
-        none
+        numpy.ndarray: Numpy array containing the pressure coefficients at each
+            calculated boundary point on the airfoil.
 
     """
 
@@ -68,3 +60,4 @@ def example_NoPlot():
     NACA0012.Get_ParsedData()
     NACA0012.Get_AirfoilCoordinates()
     NACA0012.Get_PanelCoefficients()
+    return NACA0012.pressure_coefficient

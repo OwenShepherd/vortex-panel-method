@@ -3,26 +3,46 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 import pdb
+from vpm.aeroFuncs import *
 
 
 class Airfoil:
-    def __init__(self,name,c,N,alpha,FigID=None,plotColor=None):
+    """ Airfoil handles calculations made on 4-digit series NACA airfoil.
+
+    The Airfoil class calculates the x-y coordinates of all boundary points on
+    an NACA 4-digit series airfoil.  In addition, plotting of the pressure
+    coefficients is also an option.
+
+    Parameters:
+        NACA_ID: The NACA 4-digit series airfoil name i.e. "NACA0012"
+        chord: The chord length of the airfoil
+        NUM_SAMPLES: The number of samples / panels considered
+        angle_of_attack: The angle of attack of the airfoil
+        Figure_To_Plot: The figure handle from matplotlib to plot on
+        PlotColor: The current color handle for matplotlib to plot with
+        HASPLOT: Keeps track of whether each fig has been plotted yet
+        max_camber: The maximum camber of the airfoil i.e "0/100, 1/100"
+        position_maxCamber: The position of the max. camber i.e. "4/100"
+        thickness: The maximum thickness of the airfoil i.e. "12/100", "08/100"
+        BoundaryPoints_X: The x-locations of each boundary point on the airfoil
+        BoundaryPoints_Y: The y-locations of each boundary point on the airfoil
+        full_coefficientLift: The coefficient of lift of the airfoil
+        pressure_coefficient: The pressure coefficient at each (x,y) point
+
+    """
+
+
+    def __init__(self,NACA_Name,Chord_Length,NUM_SAMPLES,Angle_Of_Attack,FigID=None,plotColor=None):
         """ The Airfoil class constructor.
 
         This function will convert the standard name of a naca airfoil
         (ex: "NACA0012" or "NACA1408", etc) into its corresponding parameters.
 
-        Args:
-            c - chord length
-            N - Number of samples
-            alpha - The angle of attack [degrees]
-            FigID - The matplotlib figure identifier
-            plotColor - The matplotlib color desired if plotting
         """
-        self.NACA_ID = name
-        self.chord = c
-        self.NUM_SAMPLES = N
-        self.angle_of_attack = alpha
+        self.NACA_ID = NACA_Name
+        self.chord = Chord_Length
+        self.NUM_SAMPLES = NUM_SAMPLES
+        self.angle_of_attack = Angle_Of_Attack
         self.Figure_To_Plot = FigID
         self.PlotColor = plotColor
         self.HASPLOT = {}
@@ -43,7 +63,7 @@ class Airfoil:
         Changes the figure identifier for the class.
 
         Args:
-            FigID - The matplotlib figure identifier
+            FigID: The matplotlib figure identifier
 
         """
         self.Figure_To_Plot = FigID
@@ -54,7 +74,7 @@ class Airfoil:
         """ Sets the color of the pressure coefficient plot to use.
 
         Args:
-            plotColor - The new matplotlib plot color
+            plotColor: The new matplotlib plot color
 
         """
 
@@ -64,7 +84,7 @@ class Airfoil:
         """ Sets the angle of attack to use for next calculations.
 
         Args:
-            alpha - The new angle of attack
+            alpha: The new angle of attack
 
         """
 
@@ -77,12 +97,7 @@ class Airfoil:
         (ex: "NACA0012" or "NACA1408", etc) into its corresponding parameters.
 
         Args:
-            name - The standard name of a NACA airfoil
-
-        Returns:
-            m - The mean camber
-            p - The location of the max camber line
-            t - The max thickness
+            NACA_ID: The standard name of a NACA airfoil
 
         """
         name = self.NACA_ID
@@ -94,6 +109,7 @@ class Airfoil:
             else:
                 airfoil_parameters.append(float(name[i] + name[i+1]))
 
+
         self.max_camber = airfoil_parameters[0]/100
         self.position_maxCamber = airfoil_parameters[1]/100
         self.thickness = airfoil_parameters[2]/100
@@ -102,17 +118,11 @@ class Airfoil:
         """ Calculates the points on a NACA 4-digit series airfoil.
 
         Args:
-            m The maximum camber
-            p The location of the maximum camber
-            t The thickness
-            c The chord length
-            N The number of employed panels
-            PLOT - Whether or not to plot Cp vs. x/c; if the plot is desired,
-                PLOT == 1
-
-        Returns:
-            X The x-locations on the airfoil
-            Y The y-locations on the airfoil
+            max_camber: The maximum camber
+            position_maxCamber: The location of the maximum camber
+            thickness: The thickness
+            chord: The chord length
+            NUM_SAMPLES: The number of employed panels
 
         """
 
@@ -199,83 +209,26 @@ class Airfoil:
         X = np.concatenate([XL,XU])
         Y = np.concatenate([YL,YU])
 
+
+
         self.BoundaryPoints_X = X
         self.BoundaryPoints_Y = Y
-
-
-    def Get_LiftCoefficients(self,V,S,M):
-        """ Calculates the lift coefficient of the wing
-
-        This function computes the coefficient of lift for an airfoil as to
-        be used in the vortex panel method "Get_PanelCoefficients"
-
-        Args:
-            V - The dimensionlesss velocity at each control point
-            S - The dimensionless length of each of the control points
-            M - The number of panels
-
-        Returns:
-            cl - The coefficient of lift
-
-        """
-
-        gamma = 0
-        for j in range(M):
-            gamma = gamma + V[j]*S[j]
-
-        cl = []
-        cl.append(2*gamma)
-
-
-
-        return cl
-
-
-    def Plot_PressureCoefficients(self,X,Y,alpha,CpUpper,CpLower,M,NACA,FigID,plotColor):
-        """ Calcultes and may plot the pressure coefficients of an airfoil.
-
-        This function will calculate the pressure coefficient at each point on
-        the chosen airfoil, and will also plot if chosen.
-
-        """
-        plt.figure(FigID.number)
-
-        if not self.HASPLOT[str(FigID.number)]:
-            plt.plot(1.2,0,'|',color='#7d7d7d',visible=True, label='Upper Surface',markersize=7)
-            plt.plot(1.2,0,'2',color='#7d7d7d',visible=True, label='Lower Surface',markersize=7)
-            plt.grid(FigID)
-            temp_gca = plt.gca()
-            temp_gca.invert_yaxis()
-            self.HASPLOT[str(FigID.number)] = True
-
-        xUpper = X[int(M/2):]
-        xLower = X[0:int(M/2)]
-
-        plot_Label = NACA + " AOA: " + str(alpha) + "$^\circ$"
-
-
-        plt.plot(xUpper,CpUpper,'-|',color=plotColor, label=plot_Label,markersize=7)
-        plt.plot(xLower,CpLower,'-2',color=plotColor,markersize=9)
-        plt.xlim(-0.1,1.1)
-        plt.legend()
-        plt.xlabel("Dimensionless Chord Location [X/C]")
-        plt.ylabel("Pressure Coefficient, Cp")
 
 
     def Get_PanelCoefficients(self,PLOT=False):
         """ Forumlates the system of equations for the vortex panel method.
 
         Args:
-            XB - The dimensionless boundary x locations on the airfoil
-            YB - The dimensionless boundary y locations on the airfoil
-            M - The total number of panels
-            alpha - The angle of attack
-            NACA - The string that specifies the 4-digit NACA airfoil, ex: 0012
-            PLOT - Whether or not to plot Cp vs. x/c; if the plot is desired,
-                Plot == 1, if the plot is not desired then PLOT == 0
-
-        Returns:
-            cl - The lift coefficient
+            BoundaryPoints_X: The dimensionless boundary x locations on the
+                airfoil
+            BoundaryPoints_Y: The dimensionless boundary y locations on the
+                airfoil
+            NUM_SAMPLES: The total number of panels
+            angle_of_attack: The angle of attack
+            NACA_ID: The string that specifies the 4-digit NACA airfoil, ex: 0012
+            PLOT: Whether or not to plot Cp vs. x/c; if the plot is desired,
+                PLOT == True
+            PlotColor: The matplotlib color handle
 
         """
         XB = self.BoundaryPoints_X
@@ -375,7 +328,7 @@ class Airfoil:
                 V[i] = V[i] + At[i,j]*gamma[j]
                 Cp[i] = 1 - (V[i])**2
 
-        cl = self.Get_LiftCoefficients(V,S,M)
+        cl = Get_LiftCoefficients(V,S,M)
 
         CpLower = Cp[0:int(M/2)]
         CpUpper = Cp[int(M/2):]
@@ -384,7 +337,7 @@ class Airfoil:
         newcl = newcl.astype(np.float)
 
         if (PLOT):
-            self.Plot_PressureCoefficients(X,Y,alphad,CpUpper,CpLower,M,NACA,FigID,plotColor)
+            self.HASPLOT = Plot_PressureCoefficients(X,Y,alphad,CpUpper,CpLower,M,NACA,FigID,plotColor,self.HASPLOT)
 
         self.full_coefficientLift = newcl
         self.pressure_coefficient = Cp
