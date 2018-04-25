@@ -6,11 +6,18 @@ import pdb
 
 
 class Airfoil:
-    def __init__(self,name,c,N,alpha):
+    def __init__(self,name,c,N,alpha,FigID,plotColor):
         self.NACA_ID = name
         self.chord = c
         self.NUM_SAMPLES = N
         self.angle_of_attack = alpha
+        self.Figure_To_Plot = FigID
+        self.PlotColor = plotColor
+
+    def Set_PlotInfo(self,alpha,FigID,plotColor):
+        self.angle_of_attack = alpha
+        self.Figure_To_Plot = FigID
+        self.PlotColor = plotColor
 
     def Get_ParsedData(self):
         """
@@ -147,7 +154,7 @@ class Airfoil:
         self.BoundaryPoints_Y = Y
 
 
-    def Get_PanelCoefficients(self,PLOT,FigID,plotColor):
+    def Get_PanelCoefficients(self,PLOT):
         """
         Function: CalculatePanelCoefficients
         Purpose: Formulates the system of equations for the vortex paneling method.
@@ -169,6 +176,8 @@ class Airfoil:
         M = self.NUM_SAMPLES
         alpha = self.angle_of_attack
         NACA = NACA_ID[4:]
+        FigID = self.Figure_To_Plot
+        plotColor = self.PlotColor
 
 
 
