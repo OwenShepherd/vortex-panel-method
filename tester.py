@@ -47,7 +47,6 @@ def tester1():
     XTest = np.around(XTest,decimals=5)
     npX = np.around(npX,decimals=5)
     print("ClTest: " + str(clTest) + " CpTest: " + str(CpTest))
-    input()
     for i in range(len(npX)):
         if (XTest[i] != npX[i]):
             print("Index: " + str(i) + " Not Equal.")
@@ -65,8 +64,18 @@ def StringExtractor():
 
     print(Data)
 
+def Plotting_Tester():
+    name = 'NACA0012'
+    c = 1
+    N = 100
+    m,p,t = Get_ParsedData(name)
+    alpha = 1
+    X, Y = Get_AirfoilCoordinates(m,p,t,c,N,False)
+    cl, Cp = Get_PanelCoefficients(X,Y,N,alpha,'',True)
+
+
 def main():
-    tester1()
+    Plotting_Tester()
 
 
 if __name__ == "__main__":

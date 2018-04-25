@@ -7,6 +7,57 @@ import pdb
 
 
 
+
+def Plot_PressureCoefficients(X,Y,CpUpper,CpLower,M):
+    """
+    Function: Plot_PressureCoefficients
+
+    Purpose: This function will plot the pressure coefficient at each point on
+    the chosen airfoil.
+
+    Parameters:
+        None
+
+    Returns:
+        None
+    """
+    plt.figure(1)
+    plt.plot(X[int(M/2):],CpUpper,'s')
+    plt.plot(X[0:int(M/2)],CpLower,'x')
+    plt.show()
+
+
+def Get_ParsedData(name):
+    """
+    Function: Get_ParsedData
+
+    Purpose: This function will convert the standard name of a naca airfoil
+    (ex: "NACA0012" or "NACA1408", etc) into its corresponding parameters.
+
+    Parameters:
+        name - The standard name of a NACA airfoil
+
+    Returns:
+        m - The mean camber
+        p - The location of the max camber line
+        t - The max thickness
+    """
+    airfoil_parameters = []
+
+    for i in range(4,len(name)-1):
+        if (i<=5):
+            airfoil_parameters.append(float(name[i]))
+        else:
+            airfoil_parameters.append(float(name[i] + name[i+1]))
+
+    m = airfoil_parameters[0]/100
+    p = airfoil_parameters[1]/100
+    t = airfoil_parameters[2]/100
+
+    return m,p,t
+
+
+
 def Get_LiftCoefficients(V,S,M):
     """
     Function: Calculate_LiftCoefficients
@@ -147,6 +198,10 @@ def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT):
     Cp = Cp.astype(np.float)
     newcl = np.array(cl)
     newcl = newcl.astype(np.float)
+
+    if (PLOT):
+        Plot_PressureCoefficients(X,Y,CpUpper,CpLower,M)
+
     return newcl,Cp
 
 
@@ -234,10 +289,6 @@ def Get_AirfoilCoordinates(m,p,t,c,N,PLOT):
 
         XL[0,i] = (xb[i])
         YL[0,i] = (yc[0,i]-yt[i]*math.cos(zeta[i]))
-        # if (t != 0.12):
-        #     pdb.set_trace()
-
-    #pdb.set_trace()
 
 
 
