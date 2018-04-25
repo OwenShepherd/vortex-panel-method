@@ -6,7 +6,7 @@ import pdb
 
 
 class Airfoil:
-    def __init__(self,name,c,N,alpha,FigID,plotColor):
+    def __init__(self,name,c,N,alpha,FigID=None,plotColor=None):
         self.NACA_ID = name
         self.chord = c
         self.NUM_SAMPLES = N
@@ -14,7 +14,8 @@ class Airfoil:
         self.Figure_To_Plot = FigID
         self.PlotColor = plotColor
         self.HASPLOT = {}
-        self.HASPLOT[str(self.Figure_To_Plot.number)] = False
+        if (FigID != None):
+            self.HASPLOT[str(self.Figure_To_Plot.number)] = False
 
     def Set_Figure(self,FigID):
         self.Figure_To_Plot = FigID
@@ -227,7 +228,7 @@ class Airfoil:
         plt.ylabel("Pressure Coefficient, Cp")
 
 
-    def Get_PanelCoefficients(self,PLOT):
+    def Get_PanelCoefficients(self,PLOT=False):
         """
         Function: CalculatePanelCoefficients
         Purpose: Formulates the system of equations for the vortex paneling method.

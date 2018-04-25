@@ -94,7 +94,7 @@ def Plotting_Tester():
     plt.show()
 
 def exampleTester():
-    example_NACA0012()
+    example_NoPlot()
 
 
 

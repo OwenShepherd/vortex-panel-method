@@ -46,3 +46,27 @@ def example_NACA0012():
     NACA0012.Set_PlotColor(plotColor)
     NACA0012.Get_PanelCoefficients(True)
     plt.show()
+
+def example_NoPlot():
+    """
+    Function: example_NoPlot
+
+    Purpose:
+        This function demonstrates how to use the airfoil class without
+        plotting anything.
+
+    Parameters:
+        none
+
+    Returns:
+        none
+    """
+
+    name = 'NACA0012'
+    c = 1
+    N = 100
+    alpha = 5
+    NACA0012 = Airfoil(name,c,N,alpha)
+    NACA0012.Get_ParsedData()
+    NACA0012.Get_AirfoilCoordinates()
+    NACA0012.Get_PanelCoefficients()
