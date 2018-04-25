@@ -24,15 +24,16 @@ def Plot_PressureCoefficients(X,Y,alpha,CpUpper,CpLower,M,NACA,FigID,plotColor):
     xUpper = X[int(M/2):]
     xLower = X[0:int(M/2)]
 
-    plot_Label = NACA + " AOA: " + str(alpha)
+    plot_Label = NACA + " AOA: " + str(alpha) + "$^\circ$"
 
     plt.figure(FigID.number)
-    plt.plot(xUpper,CpUpper,'-+',color=plotColor, label=plot_Label)
-    plt.plot(xLower,CpLower,'-x',color=plotColor)
+    plt.plot(xUpper,CpUpper,'-|',color=plotColor, label=plot_Label,markersize=7)
+    plt.plot(xLower,CpLower,'-2',color=plotColor,markersize=9)
     plt.xlim(-0.1,1.1)
     plt.legend()
     plt.xlabel("Dimensionless Chord Location [X/C]")
     plt.ylabel("Pressure Coefficient, Cp")
+
     #pdb.set_trace()
 
 

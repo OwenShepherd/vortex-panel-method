@@ -69,6 +69,7 @@ def Plotting_Tester():
     name = 'NACA0012'
     plotColor = '#00ff08'
     coeffFIG = plt.figure()
+    plt.grid()
     plt.plot(1.2,0,'+',color='#7d7d7d',visible=True, label='Upper Surface')
     plt.plot(1.2,0,'x',color='#7d7d7d',visible=True, label='Lower Surface')
     c = 1
@@ -79,6 +80,9 @@ def Plotting_Tester():
     cl, Cp = Get_PanelCoefficients(X,Y,N,alpha,'0012',True,coeffFIG,plotColor)
     alpha = 2
     plotColor = '#ff1f00'
+    cl, Cp = Get_PanelCoefficients(X,Y,N,alpha,'0012',True,coeffFIG,plotColor)
+    alpha = 10
+    plotColor = '#0074ff'
     cl, Cp = Get_PanelCoefficients(X,Y,N,alpha,'0012',True,coeffFIG,plotColor)
     plt.gca().invert_yaxis()
     plt.show()
