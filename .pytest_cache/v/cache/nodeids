@@ -1,5 +1,0 @@
-[
-  "tests/test_vpm.py::test_answer",
-  "tests/test_vpm.py::TestClass::()::test_one",
-  "tests/test_vpm.py::TestClass::()::test_two"
-]
