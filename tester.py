@@ -69,7 +69,7 @@ def Plotting_Tester():
     c = 1
     N = 100
     m,p,t = Get_ParsedData(name)
-    alpha = 1
+    alpha = 5
     X, Y = Get_AirfoilCoordinates(m,p,t,c,N,False)
     cl, Cp = Get_PanelCoefficients(X,Y,N,alpha,'',True)
 

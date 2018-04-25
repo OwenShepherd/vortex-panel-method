@@ -21,9 +21,16 @@ def Plot_PressureCoefficients(X,Y,CpUpper,CpLower,M):
     Returns:
         None
     """
+    xUpper = X[int(M/2):]
+    xLower = X[0:int(M/2)]
+
     plt.figure(1)
-    plt.plot(X[int(M/2):],CpUpper,'s')
-    plt.plot(X[0:int(M/2)],CpLower,'x')
+    plt.plot(xUpper,CpUpper,'s')
+    plt.plot(xLower,CpLower,'x')
+    plt.xlabel("Dimensionless Chord Location [X/C]")
+    plt.ylabel("Pressure Coefficient, Cp")
+    plt.gca().invert_yaxis()
+    #pdb.set_trace()
     plt.show()
 
 
