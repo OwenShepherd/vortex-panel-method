@@ -6,13 +6,39 @@ import pdb
 
 
 class Airfoil:
-    def __init__(self,m,p,t,c,N):
-        self.max_camber = m
-        self.position_max = p
-        self.thickness = t
+    def __init__(self,name,c,N,alpha):
+        self.NACA_ID = name
         self.chord = c
         self.NUM_SAMPLES = N
+        self.angle_of_attack = alpha
 
+    def Get_ParsedData(self):
+        """
+        Function: Get_ParsedData
+
+        Purpose: This function will convert the standard name of a naca airfoil
+        (ex: "NACA0012" or "NACA1408", etc) into its corresponding parameters.
+
+        Parameters:
+            name - The standard name of a NACA airfoil
+
+        Returns:
+            m - The mean camber
+            p - The location of the max camber line
+            t - The max thickness
+        """
+        name = self.NACA_ID
+        airfoil_parameters = []
+
+        for i in range(4,len(name)-1):
+            if (i<=5):
+                airfoil_parameters.append(float(name[i]))
+            else:
+                airfoil_parameters.append(float(name[i] + name[i+1]))
+
+        self.max_camber = airfoil_parameters[0]/100
+        self.position_maxCamber = airfoil_parameters[1]/100
+        self.thickness = airfoil_parameters[2]/100
 
     def Get_AirfoilCoordinates(self):
         """
@@ -35,7 +61,7 @@ class Airfoil:
         """
 
         m = self.max_camber
-        p = self.position_max
+        p = self.position_maxCamber
         t = self.thickness
         c = self.chord
         N = self.NUM_SAMPLES
@@ -117,106 +143,11 @@ class Airfoil:
         X = np.concatenate([XL,XU])
         Y = np.concatenate([YL,YU])
 
-        self.X = X
-        self.Y = Y
+        self.BoundaryPoints_X = X
+        self.BoundaryPoints_Y = Y
 
 
-
-
-
-
-    def Plot_PressureCoefficients(X,Y,alpha,CpUpper,CpLower,M,NACA,FigID,plotColor):
-        """
-        Function: Plot_PressureCoefficients
-
-        Purpose: This function will plot the pressure coefficient at each point on
-        the chosen airfoil.
-
-        Parameters:
-            None
-
-        Returns:
-            None
-        """
-        xUpper = X[int(M/2):]
-        xLower = X[0:int(M/2)]
-
-        plot_Label = NACA + " AOA: " + str(alpha) + "$^\circ$"
-
-        plt.figure(FigID.number)
-        plt.plot(xUpper,CpUpper,'-|',color=plotColor, label=plot_Label,markersize=7)
-        plt.plot(xLower,CpLower,'-2',color=plotColor,markersize=9)
-        plt.xlim(-0.1,1.1)
-        plt.legend()
-        plt.xlabel("Dimensionless Chord Location [X/C]")
-        plt.ylabel("Pressure Coefficient, Cp")
-
-        #pdb.set_trace()
-
-
-
-
-    def Get_ParsedData(name):
-        """
-        Function: Get_ParsedData
-
-        Purpose: This function will convert the standard name of a naca airfoil
-        (ex: "NACA0012" or "NACA1408", etc) into its corresponding parameters.
-
-        Parameters:
-            name - The standard name of a NACA airfoil
-
-        Returns:
-            m - The mean camber
-            p - The location of the max camber line
-            t - The max thickness
-        """
-        airfoil_parameters = []
-
-        for i in range(4,len(name)-1):
-            if (i<=5):
-                airfoil_parameters.append(float(name[i]))
-            else:
-                airfoil_parameters.append(float(name[i] + name[i+1]))
-
-        m = airfoil_parameters[0]/100
-        p = airfoil_parameters[1]/100
-        t = airfoil_parameters[2]/100
-
-        return m,p,t
-
-
-
-    def Get_LiftCoefficients(V,S,M):
-        """
-        Function: Calculate_LiftCoefficients
-
-        Purpose: This function computes the coefficient of lift for an airfoil as to
-        be used in the vortex panel method "Calculate_PanelCoefficients"
-
-        Parameters:
-            V - The dimensionlesss velocity at each control point
-            S - The dimensionless length of each of the control points
-            M - The number of panels
-
-        Returns:
-            cl - The coefficient of lift
-        """
-
-        gamma = 0
-        for j in range(M):
-            gamma = gamma + V[j]*S[j]
-
-        cl = []
-        cl.append(2*gamma)
-
-
-
-        return cl
-
-
-
-    def Get_PanelCoefficients(XB, YB, M, alpha, NACA, PLOT, FigID,plotColor):
+    def Get_PanelCoefficients(self,PLOT,FigID,plotColor):
         """
         Function: CalculatePanelCoefficients
         Purpose: Formulates the system of equations for the vortex paneling method.
@@ -233,6 +164,14 @@ class Airfoil:
         Returns:
             cl - The lift coefficient
         """
+        XB = self.BoundaryPoints_X
+        YB = self.BoundaryPoints_Y
+        M = self.NUM_SAMPLES
+        alpha = self.angle_of_attack
+        NACA = NACA_ID[4:]
+
+
+
         alphad = alpha
         alpha = math.radians(alpha)
 
@@ -331,4 +270,62 @@ class Airfoil:
         if (PLOT):
             Plot_PressureCoefficients(X,Y,alphad,CpUpper,CpLower,M,NACA,FigID,plotColor)
 
-        return newcl,Cp
+        self.full_coefficientLift = newcl
+        self.pressure_coefficient = Cp
+
+
+    def Get_LiftCoefficients(V,S,M):
+        """
+        Function: Calculate_LiftCoefficients
+
+        Purpose: This function computes the coefficient of lift for an airfoil as to
+        be used in the vortex panel method "Calculate_PanelCoefficients"
+
+        Parameters:
+            V - The dimensionlesss velocity at each control point
+            S - The dimensionless length of each of the control points
+            M - The number of panels
+
+        Returns:
+            cl - The coefficient of lift
+        """
+
+        gamma = 0
+        for j in range(M):
+            gamma = gamma + V[j]*S[j]
+
+        cl = []
+        cl.append(2*gamma)
+
+
+
+        return cl
+
+
+    def Plot_PressureCoefficients(X,Y,alpha,CpUpper,CpLower,M,NACA,FigID,plotColor):
+        """
+        Function: Plot_PressureCoefficients
+
+        Purpose: This function will plot the pressure coefficient at each point on
+        the chosen airfoil.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
+        xUpper = X[int(M/2):]
+        xLower = X[0:int(M/2)]
+
+        plot_Label = NACA + " AOA: " + str(alpha) + "$^\circ$"
+
+        plt.figure(FigID.number)
+        plt.plot(xUpper,CpUpper,'-|',color=plotColor, label=plot_Label,markersize=7)
+        plt.plot(xLower,CpLower,'-2',color=plotColor,markersize=9)
+        plt.xlim(-0.1,1.1)
+        plt.legend()
+        plt.xlabel("Dimensionless Chord Location [X/C]")
+        plt.ylabel("Pressure Coefficient, Cp")
+
+        #pdb.set_trace()
