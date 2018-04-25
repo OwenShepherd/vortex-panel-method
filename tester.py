@@ -69,22 +69,28 @@ def Plotting_Tester():
     name = 'NACA0012'
     plotColor = '#00ff08'
     coeffFIG = plt.figure()
-    plt.grid()
-    plt.plot(1.2,0,'+',color='#7d7d7d',visible=True, label='Upper Surface')
-    plt.plot(1.2,0,'x',color='#7d7d7d',visible=True, label='Lower Surface')
     c = 1
     N = 100
-    m,p,t = Get_ParsedData(name)
     alpha = 5
-    X, Y = Get_AirfoilCoordinates(m,p,t,c,N,False)
-    cl, Cp = Get_PanelCoefficients(X,Y,N,alpha,'0012',True,coeffFIG,plotColor)
+    plotColor = '#00ff08'
+    NACA0012 = Airfoil(name,c,N,alpha,coeffFIG,plotColor)
+    NACA0012.Get_ParsedData()
+    NACA0012.Get_AirfoilCoordinates()
+    NACA0012.Get_PanelCoefficients(True)
+    newFig = plt.figure()
     alpha = 2
     plotColor = '#ff1f00'
-    cl, Cp = Get_PanelCoefficients(X,Y,N,alpha,'0012',True,coeffFIG,plotColor)
+    NACA0012.Get_ParsedData()
+    NACA0012.Set_AngleOfAttack(alpha)
+    NACA0012.Set_PlotColor(plotColor)
+    NACA0012.Set_Figure(newFig)
+    NACA0012.Get_PanelCoefficients(True)
     alpha = 10
     plotColor = '#0074ff'
-    cl, Cp = Get_PanelCoefficients(X,Y,N,alpha,'0012',True,coeffFIG,plotColor)
-    plt.gca().invert_yaxis()
+    NACA0012.Get_ParsedData()
+    NACA0012.Set_AngleOfAttack(alpha)
+    NACA0012.Set_PlotColor(plotColor)
+    NACA0012.Get_PanelCoefficients(True)
     plt.show()
 
 

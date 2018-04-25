@@ -13,11 +13,19 @@ class Airfoil:
         self.angle_of_attack = alpha
         self.Figure_To_Plot = FigID
         self.PlotColor = plotColor
+        self.HASPLOT = {}
+        self.HASPLOT[str(self.Figure_To_Plot.number)] = False
 
-    def Set_PlotInfo(self,alpha,FigID,plotColor):
-        self.angle_of_attack = alpha
+    def Set_Figure(self,FigID):
         self.Figure_To_Plot = FigID
+        if (self.Figure_To_Plot.number not in self.HASPLOT):
+            self.HASPLOT[str(self.Figure_To_Plot.number)] = False
+
+    def Set_PlotColor(self,plotColor):
         self.PlotColor = plotColor
+
+    def Set_AngleOfAttack(self,alpha):
+        self.angle_of_attack = alpha
 
     def Get_ParsedData(self):
         """
@@ -154,6 +162,71 @@ class Airfoil:
         self.BoundaryPoints_Y = Y
 
 
+    def Get_LiftCoefficients(self,V,S,M):
+        """
+        Function: Calculate_LiftCoefficients
+
+        Purpose: This function computes the coefficient of lift for an airfoil as to
+        be used in the vortex panel method "Calculate_PanelCoefficients"
+
+        Parameters:
+            V - The dimensionlesss velocity at each control point
+            S - The dimensionless length of each of the control points
+            M - The number of panels
+
+        Returns:
+            cl - The coefficient of lift
+        """
+
+        gamma = 0
+        for j in range(M):
+            gamma = gamma + V[j]*S[j]
+
+        cl = []
+        cl.append(2*gamma)
+
+
+
+        return cl
+
+
+    def Plot_PressureCoefficients(self,X,Y,alpha,CpUpper,CpLower,M,NACA,FigID,plotColor):
+        """
+        Function: Plot_PressureCoefficients
+
+        Purpose: This function will plot the pressure coefficient at each point on
+        the chosen airfoil.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
+        plt.figure(FigID.number)
+
+        if not self.HASPLOT[str(FigID.number)]:
+            plt.plot(1.2,0,'+',color='#7d7d7d',visible=True, label='Upper Surface')
+            plt.plot(1.2,0,'x',color='#7d7d7d',visible=True, label='Lower Surface')
+            plt.grid(FigID)
+            temp_gca = plt.gca()
+            temp_gca.invert_yaxis()
+            self.HASPLOT[str(FigID.number)] = True
+
+        xUpper = X[int(M/2):]
+        xLower = X[0:int(M/2)]
+
+        plot_Label = NACA + " AOA: " + str(alpha) + "$^\circ$"
+
+
+        plt.plot(xUpper,CpUpper,'-|',color=plotColor, label=plot_Label,markersize=7)
+        plt.plot(xLower,CpLower,'-2',color=plotColor,markersize=9)
+        plt.xlim(-0.1,1.1)
+        plt.legend()
+        plt.xlabel("Dimensionless Chord Location [X/C]")
+        plt.ylabel("Pressure Coefficient, Cp")
+
+
     def Get_PanelCoefficients(self,PLOT):
         """
         Function: CalculatePanelCoefficients
@@ -175,7 +248,7 @@ class Airfoil:
         YB = self.BoundaryPoints_Y
         M = self.NUM_SAMPLES
         alpha = self.angle_of_attack
-        NACA = NACA_ID[4:]
+        NACA = self.NACA_ID[4:]
         FigID = self.Figure_To_Plot
         plotColor = self.PlotColor
 
@@ -268,7 +341,7 @@ class Airfoil:
                 V[i] = V[i] + At[i,j]*gamma[j]
                 Cp[i] = 1 - (V[i])**2
 
-        cl = Get_LiftCoefficients(V,S,M)
+        cl = self.Get_LiftCoefficients(V,S,M)
 
         CpLower = Cp[0:int(M/2)]
         CpUpper = Cp[int(M/2):]
@@ -277,64 +350,7 @@ class Airfoil:
         newcl = newcl.astype(np.float)
 
         if (PLOT):
-            Plot_PressureCoefficients(X,Y,alphad,CpUpper,CpLower,M,NACA,FigID,plotColor)
+            self.Plot_PressureCoefficients(X,Y,alphad,CpUpper,CpLower,M,NACA,FigID,plotColor)
 
         self.full_coefficientLift = newcl
         self.pressure_coefficient = Cp
-
-
-    def Get_LiftCoefficients(V,S,M):
-        """
-        Function: Calculate_LiftCoefficients
-
-        Purpose: This function computes the coefficient of lift for an airfoil as to
-        be used in the vortex panel method "Calculate_PanelCoefficients"
-
-        Parameters:
-            V - The dimensionlesss velocity at each control point
-            S - The dimensionless length of each of the control points
-            M - The number of panels
-
-        Returns:
-            cl - The coefficient of lift
-        """
-
-        gamma = 0
-        for j in range(M):
-            gamma = gamma + V[j]*S[j]
-
-        cl = []
-        cl.append(2*gamma)
-
-
-
-        return cl
-
-
-    def Plot_PressureCoefficients(X,Y,alpha,CpUpper,CpLower,M,NACA,FigID,plotColor):
-        """
-        Function: Plot_PressureCoefficients
-
-        Purpose: This function will plot the pressure coefficient at each point on
-        the chosen airfoil.
-
-        Parameters:
-            None
-
-        Returns:
-            None
-        """
-        xUpper = X[int(M/2):]
-        xLower = X[0:int(M/2)]
-
-        plot_Label = NACA + " AOA: " + str(alpha) + "$^\circ$"
-
-        plt.figure(FigID.number)
-        plt.plot(xUpper,CpUpper,'-|',color=plotColor, label=plot_Label,markersize=7)
-        plt.plot(xLower,CpLower,'-2',color=plotColor,markersize=9)
-        plt.xlim(-0.1,1.1)
-        plt.legend()
-        plt.xlabel("Dimensionless Chord Location [X/C]")
-        plt.ylabel("Pressure Coefficient, Cp")
-
-        #pdb.set_trace()
