@@ -7,19 +7,17 @@ sys.path.insert(0,os.path.abspath(sys.path[0]))
 from vpm.vpmfuncs import *
 
 def example_NACA0012():
-    """
-    Function: example_NACA0012
+    """ Example plotting a NACA0012 at a few angles of attack.
 
-    Purpose:
-        This function demonstrates how to plot a NACA0012 and its pressure
-        coefficients at 3 different angles of attack, ensuring that the plots
-        have a different color each time.
+    Will plot the pressure coefficients of a NACA0012 at three angles of attack
+    and each at a different color.
 
-    Parameters:
+    Args:
         none
 
     Returns:
         none
+
     """
 
     name = 'NACA0012'
@@ -48,18 +46,18 @@ def example_NACA0012():
     plt.show()
 
 def example_NoPlot():
-    """
-    Function: example_NoPlot
+    """ Demonstrates how to use the airfoil class without plotting.
 
     Purpose:
         This function demonstrates how to use the airfoil class without
         plotting anything.
 
-    Parameters:
+    Args:
         none
 
     Returns:
         none
+
     """
 
     name = 'NACA0012'

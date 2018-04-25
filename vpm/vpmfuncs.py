@@ -7,13 +7,12 @@ import pdb
 
 class Airfoil:
     def __init__(self,name,c,N,alpha,FigID=None,plotColor=None):
-        """
-        Function: Airfoil Constructor
+        """ The Airfoil class constructor.
 
-        Purpose: This function will convert the standard name of a naca airfoil
+        This function will convert the standard name of a naca airfoil
         (ex: "NACA0012" or "NACA1408", etc) into its corresponding parameters.
 
-        Parameters:
+        Args:
             c - chord length
             N - Number of samples
             alpha - The angle of attack [degrees]
@@ -39,65 +38,52 @@ class Airfoil:
 
 
     def Set_Figure(self,FigID):
-        """
-        Function: Set_Figure
+        """ Sets the figure to plot on.
 
-        Purpose: Changes the figure identifier for the class.
+        Changes the figure identifier for the class.
 
-        Parameters:
-            FigID - The new matplotlibfigure identifier
+        Args:
+            FigID - The matplotlib figure identifier
 
-        Returns:
-            none
         """
         self.Figure_To_Plot = FigID
         if (self.Figure_To_Plot.number not in self.HASPLOT):
             self.HASPLOT[str(self.Figure_To_Plot.number)] = False
 
     def Set_PlotColor(self,plotColor):
-        """
-        Function: Set_PlotColor
+        """ Sets the color of the pressure coefficient plot to use.
 
-        Purpose: Changes the the current plot color for the class.
-
-        Parameters:
+        Args:
             plotColor - The new matplotlib plot color
 
-        Returns:
-            none
         """
 
         self.PlotColor = plotColor
 
     def Set_AngleOfAttack(self,alpha):
-        """
-        Function: Set_AngleOfAttack
+        """ Sets the angle of attack to use for next calculations.
 
-        Purpose: Changes the angle of attack for the class.
-
-        Parameters:
+        Args:
             alpha - The new angle of attack
-            
-        Returns:
-            none
+
         """
 
         self.angle_of_attack = alpha
 
     def Get_ParsedData(self):
-        """
-        Function: Get_ParsedData
+        """ Converts a 'NACAXXX' string into its parameters.
 
-        Purpose: This function will convert the standard name of a naca airfoil
+        This function will convert the standard name of a naca airfoil
         (ex: "NACA0012" or "NACA1408", etc) into its corresponding parameters.
 
-        Parameters:
+        Args:
             name - The standard name of a NACA airfoil
 
         Returns:
             m - The mean camber
             p - The location of the max camber line
             t - The max thickness
+
         """
         name = self.NACA_ID
         airfoil_parameters = []
@@ -113,23 +99,21 @@ class Airfoil:
         self.thickness = airfoil_parameters[2]/100
 
     def Get_AirfoilCoordinates(self):
-        """
-        Function: Get_AirfoilCoordinates
+        """ Calculates the points on a NACA 4-digit series airfoil.
 
-        Purpose: Calculates the points on a NACA 4-digit series airfoil.
-
-        Parameters:
-            m - The maximum camber
-            p - The location of the maximum camber
-            t - The thickness
-            c - The chord length
-            N - The number of employed panels
+        Args:
+            m The maximum camber
+            p The location of the maximum camber
+            t The thickness
+            c The chord length
+            N The number of employed panels
             PLOT - Whether or not to plot Cp vs. x/c; if the plot is desired,
                 PLOT == 1
 
         Returns:
-            X - The x-locations on the airfoil
-            Y - The y-locations on the airfoil
+            X The x-locations on the airfoil
+            Y The y-locations on the airfoil
+
         """
 
         m = self.max_camber
@@ -220,19 +204,19 @@ class Airfoil:
 
 
     def Get_LiftCoefficients(self,V,S,M):
-        """
-        Function: Calculate_LiftCoefficients
+        """ Calculates the lift coefficient of the wing
 
-        Purpose: This function computes the coefficient of lift for an airfoil as to
-        be used in the vortex panel method "Calculate_PanelCoefficients"
+        This function computes the coefficient of lift for an airfoil as to
+        be used in the vortex panel method "Get_PanelCoefficients"
 
-        Parameters:
+        Args:
             V - The dimensionlesss velocity at each control point
             S - The dimensionless length of each of the control points
             M - The number of panels
 
         Returns:
             cl - The coefficient of lift
+
         """
 
         gamma = 0
@@ -248,17 +232,11 @@ class Airfoil:
 
 
     def Plot_PressureCoefficients(self,X,Y,alpha,CpUpper,CpLower,M,NACA,FigID,plotColor):
-        """
-        Function: Plot_PressureCoefficients
+        """ Calcultes and may plot the pressure coefficients of an airfoil.
 
-        Purpose: This function will plot the pressure coefficient at each point on
-        the chosen airfoil.
+        This function will calculate the pressure coefficient at each point on
+        the chosen airfoil, and will also plot if chosen.
 
-        Parameters:
-            None
-
-        Returns:
-            None
         """
         plt.figure(FigID.number)
 
@@ -285,11 +263,9 @@ class Airfoil:
 
 
     def Get_PanelCoefficients(self,PLOT=False):
-        """
-        Function: CalculatePanelCoefficients
-        Purpose: Formulates the system of equations for the vortex paneling method.
+        """ Forumlates the system of equations for the vortex panel method.
 
-        Parameters:
+        Args:
             XB - The dimensionless boundary x locations on the airfoil
             YB - The dimensionless boundary y locations on the airfoil
             M - The total number of panels
@@ -300,6 +276,7 @@ class Airfoil:
 
         Returns:
             cl - The lift coefficient
+
         """
         XB = self.BoundaryPoints_X
         YB = self.BoundaryPoints_Y
