@@ -1,0 +1,4 @@
+{
+  "tests/test_vpm.py::TestClass::()::test_two": true,
+  "tests/test_vpm.py::test_answer": true
+}
