@@ -67,16 +67,20 @@ def StringExtractor():
 
 def Plotting_Tester():
     name = 'NACA0012'
+    plotColor = '#00ff08'
     coeffFIG = plt.figure()
+    plt.plot(1.2,0,'+',color='#7d7d7d',visible=True, label='Upper Surface')
+    plt.plot(1.2,0,'x',color='#7d7d7d',visible=True, label='Lower Surface')
     c = 1
     N = 100
     m,p,t = Get_ParsedData(name)
     alpha = 5
     X, Y = Get_AirfoilCoordinates(m,p,t,c,N,False)
-    cl, Cp = Get_PanelCoefficients(X,Y,N,alpha,'',True,coeffFIG)
+    cl, Cp = Get_PanelCoefficients(X,Y,N,alpha,'0012',True,coeffFIG,plotColor)
     alpha = 2
-    cl, Cp = Get_PanelCoefficients(X,Y,N,alpha,'',True,coeffFIG)
-    plt.gca().invert_yaxis()    
+    plotColor = '#ff1f00'
+    cl, Cp = Get_PanelCoefficients(X,Y,N,alpha,'0012',True,coeffFIG,plotColor)
+    plt.gca().invert_yaxis()
     plt.show()
 
 
