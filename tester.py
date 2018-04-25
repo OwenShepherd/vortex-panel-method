@@ -6,7 +6,7 @@ import matplotlib as plt
 sys.path.insert(0,os.path.abspath(sys.path[0]))
 
 from vpm.vpmfuncs import *
-
+from vpm.examples import *
 
 def tester1():
     X = []
@@ -93,9 +93,13 @@ def Plotting_Tester():
     NACA0012.Get_PanelCoefficients(True)
     plt.show()
 
+def exampleTester():
+    example_NACA0012()
+
+
 
 def main():
-    Plotting_Tester()
+    exampleTester()
 
 
 if __name__ == "__main__":
