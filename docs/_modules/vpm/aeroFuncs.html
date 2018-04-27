@@ -1,0 +1,156 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>vpm.aeroFuncs &#8212; Vortex-Panel-Method 0.1.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for vpm.aeroFuncs</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+
+<div class="viewcode-block" id="Get_LiftCoefficients"><a class="viewcode-back" href="../../vpm.html#vpm.aeroFuncs.Get_LiftCoefficients">[docs]</a><span class="k">def</span> <span class="nf">Get_LiftCoefficients</span><span class="p">(</span><span class="n">V</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">M</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Calculates the lift coefficient of the wing</span>
+
+<span class="sd">    This function computes the coefficient of lift for an airfoil as to</span>
+<span class="sd">    be used in the vortex panel method &quot;Get_PanelCoefficients&quot;</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        V: The dimensionlesss velocity at each control point</span>
+<span class="sd">        S: The dimensionless length of each of the control points</span>
+<span class="sd">        M: The number of panels</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: The coefficient of lift</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">gamma</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+        <span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span> <span class="o">+</span> <span class="n">V</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+
+    <span class="n">cl</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">gamma</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cl</span></div>
+
+<div class="viewcode-block" id="Plot_PressureCoefficients"><a class="viewcode-back" href="../../vpm.html#vpm.aeroFuncs.Plot_PressureCoefficients">[docs]</a><span class="k">def</span> <span class="nf">Plot_PressureCoefficients</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">CpUpper</span><span class="p">,</span><span class="n">CpLower</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">NACA</span><span class="p">,</span><span class="n">FigID</span><span class="p">,</span><span class="n">plotColor</span><span class="p">,</span><span class="n">HASPLOT</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Calcultes and may plot the pressure coefficients of an airfoil.</span>
+
+<span class="sd">    This function will calculate the pressure coefficient at each point on</span>
+<span class="sd">    the chosen airfoil, and will also plot if chosen.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        X: The x-locations of each boundary point on the airfoil</span>
+<span class="sd">        Y: The y-locations of each boundary point on the airfoil</span>
+<span class="sd">        alpha: The angle of attack of the airfoil</span>
+<span class="sd">        CpUpper: The numpy array containing the upper pressure coefficient values</span>
+<span class="sd">        CpLower: The numpy array containing the lower pressure coefficient values</span>
+<span class="sd">        M: The number of samples / panels considered</span>
+<span class="sd">        NACA: The NACA 4-digit series airfoil name i.e. &quot;NACA0012&quot;</span>
+<span class="sd">        FigID: The figure handle from matplotlib to plot on</span>
+<span class="sd">        PlotColor: The current color handle for matplotlib to plot with</span>
+<span class="sd">        HASPLOT: Dictionary that keeps track of which figs have an existing plot.</span>
+<span class="sd">            I.e: HASPLOT[&quot;1&quot;] = True, if the fig with fig.number == 1 already has</span>
+<span class="sd">            an existing plot</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: Updated version of the HASPLOT dictionary</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">FigID</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">HASPLOT</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">FigID</span><span class="o">.</span><span class="n">number</span><span class="p">)]:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;|&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;#7d7d7d&#39;</span><span class="p">,</span><span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Upper Surface&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;#7d7d7d&#39;</span><span class="p">,</span><span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Lower Surface&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">FigID</span><span class="p">)</span>
+        <span class="n">temp_gca</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+        <span class="n">temp_gca</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+        <span class="n">HASPLOT</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">FigID</span><span class="o">.</span><span class="n">number</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">xUpper</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">M</span><span class="o">/</span><span class="mi">2</span><span class="p">):]</span>
+    <span class="n">xLower</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">M</span><span class="o">/</span><span class="mi">2</span><span class="p">)]</span>
+
+    <span class="n">plot_Label</span> <span class="o">=</span> <span class="n">NACA</span> <span class="o">+</span> <span class="s2">&quot; AOA: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;$^\circ$&quot;</span>
+
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xUpper</span><span class="p">,</span><span class="n">CpUpper</span><span class="p">,</span><span class="s1">&#39;-|&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">plotColor</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">plot_Label</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xLower</span><span class="p">,</span><span class="n">CpLower</span><span class="p">,</span><span class="s1">&#39;-2&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">plotColor</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">1.1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Dimensionless Chord Location [X/C]&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Pressure Coefficient, Cp&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">HASPLOT</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Owen Shepherd.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
