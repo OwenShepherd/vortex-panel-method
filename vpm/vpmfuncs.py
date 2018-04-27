@@ -32,7 +32,8 @@ class Airfoil:
     """
 
 
-    def __init__(self,NACA_Name,Chord_Length,NUM_SAMPLES,Angle_Of_Attack,FigID=None,plotColor=None):
+    def __init__(self,NACA_Name,Chord_Length,NUM_SAMPLES,Angle_Of_Attack,
+                 FigID=None,plotColor=None):
         """ The Airfoil class constructor.
 
         This function will convert the standard name of a naca airfoil
@@ -159,7 +160,12 @@ class Airfoil:
 
         # Now we shall determine the points of interest on the airfoil (the y-
         # locations)
-        yt = [t*c/0.2*(0.2969*pow((k/c),0.5)-0.1260*(k/c)-0.3516*pow((k/c),2)+0.2843*pow((k/c),3)-0.1036*pow(k/c,4)) for k in xb]
+        yt = [t*c/0.2*
+              (0.2969*pow((k/c),0.5)-
+              0.1260*(k/c)-
+              0.3516*pow((k/c),2)+
+              0.2843*pow((k/c),3)-
+              0.1036*pow(k/c,4)) for k in xb]
 
         # Here we can determine the mean camber line
         yc = np.zeros((1,len(xb)))

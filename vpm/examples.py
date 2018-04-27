@@ -3,9 +3,11 @@ import sys
 import numpy as np
 import matplotlib as plt
 import pdb
-sys.path.insert(0,os.path.abspath(sys.path[0]))
+RootPath = os.path.abspath(os.path.join(sys.path[0],".."))
+sys.path.insert(0,os.path.abspath(RootPath))
 
 from vpm.vpmfuncs import *
+
 
 def example_NACA0012():
     """ Example plotting a NACA0012 at a few angles of attack.
@@ -61,3 +63,13 @@ def example_NoPlot():
     NACA0012.Get_AirfoilCoordinates()
     NACA0012.Get_PanelCoefficients()
     return NACA0012.pressure_coefficient
+
+
+if __name__=="__main__":
+    FunctionCall = sys.argv[1]
+    possibles = globals().copy()
+    possibles.update(locals())
+    method = possibles.get(FunctionCall)
+    if not method:
+        raise NotImplementedError("Method %s not implemented." %FunctionCall)
+    method()
