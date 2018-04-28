@@ -11,7 +11,7 @@ from vpm.vpmfuncs import *
 
 def test_NACA0012():
     testName = 'NACA0012'
-    XPy, YPy, XMat, YMat, clPy, CpPy, clMat, cPMat = Data_Comparison(testName)
+    XPy, YPy, XMat, YMat, clPy, CpPy, clMat, cPMat = data_comparison(testName)
     for i in range(len(XPy)):
         assert(abs(XPy[i]-XMat[i])<=0.001)
         assert(abs(YPy[i]-YMat[i])<=0.001)
@@ -21,7 +21,7 @@ def test_NACA0012():
 
 def test_NACA1408():
     testName = 'NACA1408'
-    XPy, YPy, XMat, YMat, clPy, CpPy, clMat, cPMat = Data_Comparison(testName)
+    XPy, YPy, XMat, YMat, clPy, CpPy, clMat, cPMat = data_comparison(testName)
     for i in range(len(XPy)):
         assert(abs(XPy[i]-XMat[i])<=0.001)
         assert(abs(YPy[i]-YMat[i])<=0.001)
@@ -31,7 +31,7 @@ def test_NACA1408():
 
 def test_NACA2410():
     testName = 'NACA2410'
-    XPy, YPy, XMat, YMat, clPy, CpPy, clMat, cPMat = Data_Comparison(testName)
+    XPy, YPy, XMat, YMat, clPy, CpPy, clMat, cPMat = data_comparison(testName)
     for i in range(len(XPy)):
         assert(abs(XPy[i]-XMat[i])<=0.001)
         assert(abs(YPy[i]-YMat[i])<=0.001)
@@ -41,7 +41,7 @@ def test_NACA2410():
 
 def test_NACA4415():
     testName = 'NACA4415'
-    XPy, YPy, XMat, YMat, clPy, CpPy, clMat, cPMat = Data_Comparison(testName)
+    XPy, YPy, XMat, YMat, clPy, CpPy, clMat, cPMat = data_comparison(testName)
     for i in range(len(XPy)):
         assert(abs(XPy[i]-XMat[i])<=0.001)
         assert(abs(YPy[i]-YMat[i])<=0.001)
@@ -51,7 +51,7 @@ def test_NACA4415():
 
 def test_NACA6412():
     testName = 'NACA6412'
-    XPy, YPy, XMat, YMat, clPy, CpPy, clMat, cPMat = Data_Comparison(testName)
+    XPy, YPy, XMat, YMat, clPy, CpPy, clMat, cPMat = data_comparison(testName)
     for i in range(len(XPy)):
         assert(abs(XPy[i]-XMat[i])<=0.001)
         assert(abs(YPy[i]-YMat[i])<=0.001)
@@ -59,7 +59,7 @@ def test_NACA6412():
             assert(abs(cPMat[i]-CpPy[i])<=0.001)
     assert(abs(clPy-clMat)<=0.001)
 
-def Data_Comparison(NACA_Name):
+def data_comparison(NACA_Name):
     X = []
     Y = []
     cl = []
@@ -80,9 +80,9 @@ def Data_Comparison(NACA_Name):
 
 
     NACAAirfoil = Airfoil(NACA_Name,c,N,alpha)
-    NACAAirfoil.Get_ParsedData()
-    NACAAirfoil.Get_AirfoilCoordinates()
-    NACAAirfoil.Get_PanelCoefficients()
+    NACAAirfoil.get_parsed_data()
+    NACAAirfoil.get_airfoil_coordinates()
+    NACAAirfoil.get_panel_coefficients()
 
     relpath = sys.path[0] + '/tests/test_data/' + NACA_Name + '.csv'
 
@@ -108,13 +108,13 @@ def Data_Comparison(NACA_Name):
     npCp = np.array(Cp)
     npCp = npCp.astype(np.float)
 
-    NACAAirfoil.BoundaryPoints_X = np.around(NACAAirfoil.BoundaryPoints_X,decimals=4)
+    NACAAirfoil.x_boundary_points = np.around(NACAAirfoil.x_boundary_points,decimals=4)
     npX = np.around(npX,decimals=4)
-    NACAAirfoil.BoundaryPoints_Y = np.around(NACAAirfoil.BoundaryPoints_Y,decimals=4)
+    NACAAirfoil.y_boundary_points = np.around(NACAAirfoil.y_boundary_points,decimals=4)
     npY = np.around(npY,decimals=4)
-    NACAAirfoil.full_coefficientLift = np.around(NACAAirfoil.full_coefficientLift,decimals=4)
+    NACAAirfoil.full_coefficient_lift = np.around(NACAAirfoil.full_coefficient_lift,decimals=4)
     npcl = np.around(npcl,decimals=4)
     npCp = np.around(npCp,decimals=4)
     NACAAirfoil.pressure_coefficient = np.around(NACAAirfoil.pressure_coefficient,decimals=4)
 
-    return NACAAirfoil.BoundaryPoints_X, NACAAirfoil.BoundaryPoints_Y, npX, npY, NACAAirfoil.full_coefficientLift, NACAAirfoil.pressure_coefficient, npcl, npCp
+    return NACAAirfoil.x_boundary_points, NACAAirfoil.y_boundary_points, npX, npY, NACAAirfoil.full_coefficient_lift, NACAAirfoil.pressure_coefficient, npcl, npCp

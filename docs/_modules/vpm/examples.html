@@ -46,9 +46,11 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="n">RootPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s2">&quot;..&quot;</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">RootPath</span><span class="p">))</span>
 
 <span class="kn">from</span> <span class="nn">vpm.vpmfuncs</span> <span class="k">import</span> <span class="o">*</span>
+
 
 <div class="viewcode-block" id="example_NACA0012"><a class="viewcode-back" href="../../vpm.html#vpm.examples.example_NACA0012">[docs]</a><span class="k">def</span> <span class="nf">example_NACA0012</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; Example plotting a NACA0012 at a few angles of attack.</span>
@@ -66,24 +68,24 @@
     <span class="n">alpha</span> <span class="o">=</span> <span class="mi">5</span>
     <span class="n">plotColor</span> <span class="o">=</span> <span class="s1">&#39;#00ff08&#39;</span>
     <span class="n">NACA0012</span> <span class="o">=</span> <span class="n">Airfoil</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">coeffFIG</span><span class="p">,</span><span class="n">plotColor</span><span class="p">)</span>
-    <span class="n">NACA0012</span><span class="o">.</span><span class="n">Get_ParsedData</span><span class="p">()</span>
-    <span class="n">NACA0012</span><span class="o">.</span><span class="n">Get_AirfoilCoordinates</span><span class="p">()</span>
-    <span class="n">NACA0012</span><span class="o">.</span><span class="n">Get_PanelCoefficients</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">NACA0012</span><span class="o">.</span><span class="n">get_parsed_data</span><span class="p">()</span>
+    <span class="n">NACA0012</span><span class="o">.</span><span class="n">get_airfoil_coordinates</span><span class="p">()</span>
+    <span class="n">NACA0012</span><span class="o">.</span><span class="n">get_panel_coefficients</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">alpha</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="n">plotColor</span> <span class="o">=</span> <span class="s1">&#39;#ff1f00&#39;</span>
-    <span class="n">NACA0012</span><span class="o">.</span><span class="n">Get_ParsedData</span><span class="p">()</span>
-    <span class="n">NACA0012</span><span class="o">.</span><span class="n">Set_AngleOfAttack</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
-    <span class="n">NACA0012</span><span class="o">.</span><span class="n">Set_PlotColor</span><span class="p">(</span><span class="n">plotColor</span><span class="p">)</span>
-    <span class="n">NACA0012</span><span class="o">.</span><span class="n">Get_PanelCoefficients</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">NACA0012</span><span class="o">.</span><span class="n">get_parsed_data</span><span class="p">()</span>
+    <span class="n">NACA0012</span><span class="o">.</span><span class="n">set_angle_of_attack</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">NACA0012</span><span class="o">.</span><span class="n">set_plot_color</span><span class="p">(</span><span class="n">plotColor</span><span class="p">)</span>
+    <span class="n">NACA0012</span><span class="o">.</span><span class="n">get_panel_coefficients</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">alpha</span> <span class="o">=</span> <span class="mi">10</span>
     <span class="n">plotColor</span> <span class="o">=</span> <span class="s1">&#39;#0074ff&#39;</span>
-    <span class="n">NACA0012</span><span class="o">.</span><span class="n">Get_ParsedData</span><span class="p">()</span>
-    <span class="n">NACA0012</span><span class="o">.</span><span class="n">Set_AngleOfAttack</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
-    <span class="n">NACA0012</span><span class="o">.</span><span class="n">Set_PlotColor</span><span class="p">(</span><span class="n">plotColor</span><span class="p">)</span>
-    <span class="n">NACA0012</span><span class="o">.</span><span class="n">Get_PanelCoefficients</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">NACA0012</span><span class="o">.</span><span class="n">get_parsed_data</span><span class="p">()</span>
+    <span class="n">NACA0012</span><span class="o">.</span><span class="n">set_angle_of_attack</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">NACA0012</span><span class="o">.</span><span class="n">set_plot_color</span><span class="p">(</span><span class="n">plotColor</span><span class="p">)</span>
+    <span class="n">NACA0012</span><span class="o">.</span><span class="n">get_panel_coefficients</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="example_NoPlot"><a class="viewcode-back" href="../../vpm.html#vpm.examples.example_NoPlot">[docs]</a><span class="k">def</span> <span class="nf">example_NoPlot</span><span class="p">():</span>
+<div class="viewcode-block" id="example_noplot"><a class="viewcode-back" href="../../vpm.html#vpm.examples.example_noplot">[docs]</a><span class="k">def</span> <span class="nf">example_noplot</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; Demonstrates how to use the airfoil class without plotting.</span>
 
 <span class="sd">    This function demonstrates how to use the airfoil class without</span>
@@ -100,10 +102,20 @@
     <span class="n">N</span> <span class="o">=</span> <span class="mi">100</span>
     <span class="n">alpha</span> <span class="o">=</span> <span class="mi">5</span>
     <span class="n">NACA0012</span> <span class="o">=</span> <span class="n">Airfoil</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">alpha</span><span class="p">)</span>
-    <span class="n">NACA0012</span><span class="o">.</span><span class="n">Get_ParsedData</span><span class="p">()</span>
-    <span class="n">NACA0012</span><span class="o">.</span><span class="n">Get_AirfoilCoordinates</span><span class="p">()</span>
-    <span class="n">NACA0012</span><span class="o">.</span><span class="n">Get_PanelCoefficients</span><span class="p">()</span>
+    <span class="n">NACA0012</span><span class="o">.</span><span class="n">get_parsed_data</span><span class="p">()</span>
+    <span class="n">NACA0012</span><span class="o">.</span><span class="n">get_airfoil_coordinates</span><span class="p">()</span>
+    <span class="n">NACA0012</span><span class="o">.</span><span class="n">get_panel_coefficients</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">NACA0012</span><span class="o">.</span><span class="n">pressure_coefficient</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">FunctionCall</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">possibles</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">possibles</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">locals</span><span class="p">())</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="n">possibles</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">FunctionCall</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">method</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Method </span><span class="si">%s</span><span class="s2"> not implemented.&quot;</span> <span class="o">%</span><span class="n">FunctionCall</span><span class="p">)</span>
+    <span class="n">method</span><span class="p">()</span>
 </pre></div>
 
           </div>
