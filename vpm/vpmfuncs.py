@@ -107,7 +107,8 @@ class Airfoil:
             if (i<=5):
                 airfoil_parameters.append(float(self.NACA_ID[i]))
             else:
-                airfoil_parameters.append(float(self.NACA_ID[i] + self.NACA_ID[i+1]))
+                airfoil_parameters.append(float(self.NACA_ID[i]
+                                                + self.NACA_ID[i+1]))
 
 
         self.max_camber = airfoil_parameters[0]/100
@@ -127,33 +128,33 @@ class Airfoil:
         """
 
         # Splitting the airfoil into equal-length x-locations ALA K&C
-        dt = 2*math.pi/self.NUM_SAMPLES
+        delta_theta = 2*math.pi/self.NUM_SAMPLES
 
         # Creating some control values and storage variables
         NOTDONE = True
-        th = [0] * int(self.NUM_SAMPLES/2+1)
-        th[0] = 0
+        airfoil_angles = [0] * int(self.NUM_SAMPLES/2+1)
+        airfoil_angles[0] = 0
         i = 1
 
         # Want angles to go from zero to pi and split the boundary x-y locations
         # into upper and lower locations
         while (NOTDONE):
-            value = th[i-1] + dt
+            value = airfoil_angles[i-1] + delta_theta
 
             if (abs(value-math.pi)<=0.0000001):
-                th[i] = value
+                airfoil_angles[i] = value
                 NOTDONE = False
             else:
-                th[i] = value
+                airfoil_angles[i] = value
                 i = i+1
 
         # Now here we determine the x-lcations based off of the thetas
-        R = 0.5*self.chord
-        x_coordinates = [R+R*math.cos(k) for k in th]
+        radius = 0.5*self.chord
+        x_coordinates = [radius+radius*math.cos(k) for k in airfoil_angles]
 
         # Now we shall determine the points of interest on the airfoil (the y-
         # locations)
-        yt = [self.thickness*self.chord/0.2*
+        height_above_mcamber = [self.thickness*self.chord/0.2*
               (0.2969*pow((k/self.chord),0.5)-
               0.1260*(k/self.chord)-
               0.3516*pow((k/self.chord),2)+
@@ -167,23 +168,35 @@ class Airfoil:
         if ((self.position_max_camber!=0) or (self.max_camber!=0)):
             for i in range(len(x_coordinates)):
                 if (x_coordinates[i]<=(self.position_max_camber*self.chord)):
-                    yc[0,i] = (self.max_camber*x_coordinates[i]/(pow(self.position_max_camber,2))
-                               * (2*self.position_max_camber-x_coordinates[i]/self.chord))
+                    yc[0,i] = ((self.max_camber*x_coordinates[i])
+                               / (pow(self.position_max_camber,2))
+                               * (2*self.position_max_camber
+                                  - x_coordinates[i]/self.chord))
 
-                    dyc[0,i] = (self.max_camber*x_coordinates[i]/(pow(self.position_max_camber,2))
+                    dyc[0,i] = (self.max_camber*x_coordinates[i]
+                                / (pow(self.position_max_camber,2))
                                 * (-1/float(self.chord))
-                                + self.max_camber/(pow(self.position_max_camber,2))
-                                * (2*self.position_max_camber-x_coordinates[i]/self.chord))
+                                + self.max_camber
+                                / (pow(self.position_max_camber,2))
+                                * (2*self.position_max_camber
+                                   - x_coordinates[i]/self.chord))
 
                 else:
                     yc[0,i] = (self.max_camber*(self.chord-x_coordinates[i])
                                / ((1-self.position_max_camber)**2)
-                               * (1+x_coordinates[i]/self.chord-2*self.position_max_camber))
+                               * (1+x_coordinates[i]/self.chord
+                                  - 2*self.position_max_camber))
 
-                    dyc[0,i] = ((self.max_camber*(self.chord-x_coordinates[i])/(1-self.position_max_camber*self.position_max_camber))
+                    dyc[0,i] = ((self.max_camber
+                                 * (self.chord-x_coordinates[i])
+                                 / (1-self.position_max_camber
+                                    * self.position_max_camber))
                                 * 1/float(self.chord)
-                                + (-1*self.max_camber)/(1-self.position_max_camber*self.position_max_camber)
-                                * (1+x_coordinates[i]/self.chord-2*self.position_max_camber))
+                                + (-1*self.max_camber)
+                                / (1-self.position_max_camber
+                                   * self.position_max_camber)
+                                * (1+x_coordinates[i]/self.chord
+                                   - 2*self.position_max_camber))
 
 
         # Now we can define parameter zeta
@@ -191,33 +204,37 @@ class Airfoil:
 
 
 
-        XU = np.zeros((1,len(x_coordinates)))
-        YU = np.zeros((1,len(x_coordinates)))
-        XL = np.zeros((1,len(x_coordinates)))
-        YL = np.zeros((1,len(x_coordinates)))
+        positive_x_coordinates = np.zeros((1,len(x_coordinates)))
+        positive_y_coordinates = np.zeros((1,len(x_coordinates)))
+        negative_x_coordinates = np.zeros((1,len(x_coordinates)))
+        negative_y_coordinates = np.zeros((1,len(x_coordinates)))
 
         # Creating the upper and lower x,y locations
         for i in range(len(x_coordinates)):
-            XU[0,i] = (x_coordinates[i])
-            YU[0,i] = (yc[0,i]+yt[i]*math.cos(zeta[i]))
+            positive_x_coordinates[0,i] = (x_coordinates[i])
+            positive_y_coordinates[0,i] = (yc[0,i]
+                                           + height_above_mcamber[i]
+                                           * math.cos(zeta[i]))
 
-            XL[0,i] = (x_coordinates[i])
-            YL[0,i] = (yc[0,i]-yt[i]*math.cos(zeta[i]))
+            negative_x_coordinates[0,i] = (x_coordinates[i])
+            negative_y_coordinates[0,i] = (yc[0,i]
+                                           - height_above_mcamber[i]
+                                           * math.cos(zeta[i]))
 
 
 
-        # This ensures that the boundary points go from the trailing edge, clockwise
-        # back to the trailing edge with two boundary points at the trailing edge
-        # and one at the leading edge
-        XU = np.delete(XU,-1)
-        YU = np.delete(YU,-1)
-        XU = XU[::-1]
-        YU = YU[::-1]
-        XL = XL[0,:]
-        YL = YL[0,:]
+        # This ensures that the boundary points go from the trailing edge,
+        # clockwise back to the trailing edge with two boundary points at the
+        # trailing edge and one at the leading edge
+        positive_x_coordinates = np.delete(positive_x_coordinates,-1)
+        positive_y_coordinates = np.delete(positive_y_coordinates,-1)
+        positive_x_coordinates = positive_x_coordinates[::-1]
+        positive_y_coordinates = positive_y_coordinates[::-1]
+        negative_x_coordinates = negative_x_coordinates[0,:]
+        negative_y_coordinates = negative_y_coordinates[0,:]
 
-        X = np.concatenate([XL,XU])
-        Y = np.concatenate([YL,YU])
+        X = np.concatenate([negative_x_coordinates,positive_x_coordinates])
+        Y = np.concatenate([negative_y_coordinates,positive_y_coordinates])
 
 
 
@@ -268,9 +285,13 @@ class Airfoil:
             X[i] = 0.5 * (x_coordinates[i] + x_coordinates[IP1])
             Y[i] = 0.5 * (y_coordinates[i] + y_coordinates[IP1])
 
-            S[i] = math.sqrt(pow(x_coordinates[IP1] - x_coordinates[i],2) + pow(y_coordinates[IP1] - y_coordinates[i],2))
+            S[i] = math.sqrt(pow(x_coordinates[IP1]
+                                 - x_coordinates[i],2)
+                             + pow(y_coordinates[IP1]
+                                 - y_coordinates[i],2))
 
-            theta[i] = math.atan2(y_coordinates[IP1] - y_coordinates[i], x_coordinates[IP1] - x_coordinates[i])
+            theta[i] = math.atan2((y_coordinates[IP1] - y_coordinates[i]),
+                                   x_coordinates[IP1] - x_coordinates[i])
 
             RHS[i] = math.sin(theta[i] - self.angle_of_attack)
 
@@ -291,43 +312,54 @@ class Airfoil:
                     CT1[i,j] = 0.5 * math.pi
                     CT2[i,j] = 0.5 * math.pi
                 else:
-                    A = (-1*(X[i]-x_coordinates[j])
-                         * math.cos(theta[j])
-                         - (Y[i]-y_coordinates[j])
-                         * math.sin(theta[j]))
+                    A_mat = (-1*(X[i]-x_coordinates[j])
+                             * math.cos(theta[j])
+                             - (Y[i]-y_coordinates[j])
+                             * math.sin(theta[j]))
 
-                    B = ((X[i]-x_coordinates[j])**2
-                         + (Y[i]-y_coordinates[j])**2)
+                    B_mat = ((X[i]-x_coordinates[j])**2
+                             + (Y[i]-y_coordinates[j])**2)
 
-                    C = math.sin(theta[i]-theta[j])
-                    D = math.cos(theta[i]-theta[j])
+                    C_mat = math.sin(theta[i]-theta[j])
+                    D_mat = math.cos(theta[i]-theta[j])
 
-                    E = ((X[i]-x_coordinates[j])
-                         * math.sin(theta[j])
-                         - (Y[i]-y_coordinates[j])
-                         * math.cos(theta[j]))
+                    E_mat = ((X[i]-x_coordinates[j])
+                             * math.sin(theta[j])
+                             - (Y[i]-y_coordinates[j])
+                             * math.cos(theta[j]))
 
-                    F = math.log(1+S[j]*(S[j]+2*A)/B)
-                    G = math.atan2((E*S[j]),(B+A*S[j]))
+                    F_mat = math.log(1+S[j]*(S[j]+2*A_mat)/B_mat)
+                    G_mat = math.atan2((E_mat*S[j]),(B_mat+A_mat*S[j]))
 
-                    P = ((X[i]-x_coordinates[j])
-                         * math.sin(theta[i]
-                                    - 2*theta[j])
-                         + (Y[i]-y_coordinates[j])
-                         * math.cos(theta[i]
-                                    - 2*theta[j]))
+                    P_mat = ((X[i]-x_coordinates[j])
+                             * math.sin(theta[i]
+                                        - 2*theta[j])
+                             + (Y[i]-y_coordinates[j])
+                             * math.cos(theta[i]
+                                        - 2*theta[j]))
 
-                    Q = ((X[i]-x_coordinates[j])
-                         * math.cos(theta[i]
-                                    - 2*theta[j])
-                         - (Y[i]-y_coordinates[j])
-                         * math.sin(theta[i]
-                                    - 2*theta[j]))
+                    Q_mat = ((X[i]-x_coordinates[j])
+                             * math.cos(theta[i]
+                                        - 2*theta[j])
+                             - (Y[i]-y_coordinates[j])
+                             * math.sin(theta[i]
+                                        - 2*theta[j]))
 
-                    CN2[i,j] = D + 0.5 * Q * F/S[j] - (A*C + D*E) * G/S[j]
-                    CN1[i,j] = 0.5*D*F + C*G - CN2[i,j]
-                    CT2[i,j] = C + 0.5*P*F/S[j] + (A*D - C*E) * G/S[j]
-                    CT1[i,j] = 0.5*C*F - D*G - CT2[i,j]
+                    CN2[i,j] = ((D_mat + 0.5 * Q_mat * F_mat/S[j])
+                                - (A_mat*C_mat + D_mat*E_mat)
+                                * G_mat/S[j])
+
+                    CN1[i,j] = ((0.5*D_mat*F_mat)
+                                 + C_mat*G_mat
+                                 - CN2[i,j])
+
+                    CT2[i,j] = ((C_mat + 0.5 * P_mat*F_mat/S[j])
+                                 + (A_mat*D_mat - C_mat*E_mat)
+                                 * G_mat/S[j])
+
+                    CT1[i,j] = ((0.5*C_mat*F_mat)
+                                 - D_mat*G_mat
+                                 - CT2[i,j])
 
         for i in range(number_panels):
             An[i,0] = CN1[i,0]
@@ -365,13 +397,16 @@ class Airfoil:
         CpLower = Cp[0:int(self.NUM_SAMPLES/2)]
         CpUpper = Cp[int(self.NUM_SAMPLES/2):]
         Cp = Cp.astype(np.float)
-        newcl = np.array(cl)
-        newcl = newcl.astype(np.float)
+        cl = np.array(cl)
+        cl = cl.astype(np.float)
 
         if (PLOT):
             self.HASPLOT = Plot_PressureCoefficients(X,Y,alphad,CpUpper,CpLower,
-                                                     self.NUM_SAMPLES,NACA_4digit,figure_ID,plot_color,
+                                                     self.NUM_SAMPLES,
+                                                     NACA_4digit,
+                                                     figure_ID,
+                                                     plot_color,
                                                      self.HASPLOT)
 
-        self.full_coefficient_lift = newcl
+        self.full_coefficient_lift = cl
         self.pressure_coefficient = Cp
