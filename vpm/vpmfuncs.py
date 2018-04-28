@@ -174,12 +174,23 @@ class Airfoil:
         if ((p!=0) or (m!=0)):
             for i in range(len(xb)):
                 if (xb[i]<=(p*c)):
-                    yc[0,i] = (m*xb[i]/(pow(p,2))*(2*p-xb[i]/c))
-                    dyc[0,i] = (m*xb[i]/(pow(p,2))*(-1/float(c))+m/(pow(p,2))*(2*p-xb[i]/c))
+                    yc[0,i] = (m*xb[i]/(pow(p,2))
+                               * (2*p-xb[i]/c))
+
+                    dyc[0,i] = (m*xb[i]/(pow(p,2))
+                                * (-1/float(c))
+                                + m/(pow(p,2))
+                                * (2*p-xb[i]/c))
 
                 else:
-                    yc[0,i] = m*(c-xb[i])/((1-p)**2)*(1+xb[i]/c-2*p)
-                    dyc[0,i] = (m*(c-xb[i])/(1-p*p))*1/float(c)+(-1*m)/(1-p*p)*(1+xb[i]/c-2*p)
+                    yc[0,i] = (m*(c-xb[i])
+                               / ((1-p)**2)
+                               * (1+xb[i]/c-2*p))
+
+                    dyc[0,i] = ((m*(c-xb[i])/(1-p*p))
+                                * 1/float(c)
+                                + (-1*m)/(1-p*p)
+                                * (1+xb[i]/c-2*p))
 
 
         # Now we can define parameter zeta
@@ -231,7 +242,8 @@ class Airfoil:
                 airfoil
             NUM_SAMPLES: The total number of panels
             angle_of_attack: The angle of attack
-            NACA_ID: The string that specifies the 4-digit NACA airfoil, ex: 0012
+            NACA_ID: The string that specifies the 4-digit NACA airfoil, for
+                example: 0012
             PLOT: Whether or not to plot Cp vs. x/c; if the plot is desired,
                 PLOT == True
             PlotColor: The matplotlib color handle
@@ -252,7 +264,6 @@ class Airfoil:
 
         MP1 = M+1 # The trailing edge requries an extra point
 
-        """ TODO: Find better variable names for these arrays """
         X = np.zeros(M)
         Y = np.zeros(M)
         RHS = np.zeros(MP1)
@@ -288,15 +299,38 @@ class Airfoil:
                     CT1[i,j] = 0.5 * math.pi
                     CT2[i,j] = 0.5 * math.pi
                 else:
-                    A = -1*(X[i]-XB[j])*math.cos(theta[j])-(Y[i]-YB[j])*math.sin(theta[j])
-                    B = (X[i]-XB[j])**2+(Y[i]-YB[j])**2
+                    A = (-1*(X[i]-XB[j])
+                         * math.cos(theta[j])
+                         - (Y[i]-YB[j])
+                         * math.sin(theta[j]))
+
+                    B = (X[i]-XB[j])**2
+                         + (Y[i]-YB[j])**2
+
                     C = math.sin(theta[i]-theta[j])
                     D = math.cos(theta[i]-theta[j])
-                    E = (X[i]-XB[j])*math.sin(theta[j])-(Y[i]-YB[j])*math.cos(theta[j])
+
+                    E = (X[i]-XB[j])
+                         * math.sin(theta[j])
+                         - (Y[i]-YB[j])
+                         * math.cos(theta[j])
+
                     F = math.log(1+S[j]*(S[j]+2*A)/B)
                     G = math.atan2((E*S[j]),(B+A*S[j]))
-                    P = (X[i]-XB[j])*math.sin(theta[i]-2*theta[j])+(Y[i]-YB[j])*math.cos(theta[i]-2*theta[j])
-                    Q = (X[i]-XB[j])*math.cos(theta[i]-2*theta[j])-(Y[i]-YB[j])*math.sin(theta[i]-2*theta[j])
+
+                    P = ((X[i]-XB[j])
+                         * math.sin(theta[i]
+                                    - 2*theta[j])
+                         + (Y[i]-YB[j])
+                         * math.cos(theta[i]
+                                    - 2*theta[j]))
+
+                    Q = ((X[i]-XB[j])
+                         * math.cos(theta[i]
+                                    - 2*theta[j])
+                         - (Y[i]-YB[j])
+                         * math.sin(theta[i]
+                                    - 2*theta[j]))
 
                     CN2[i,j] = D + 0.5 * Q * F/S[j] - (A*C + D*E) * G/S[j]
                     CN1[i,j] = 0.5*D*F + C*G - CN2[i,j]
@@ -343,7 +377,9 @@ class Airfoil:
         newcl = newcl.astype(np.float)
 
         if (PLOT):
-            self.HASPLOT = Plot_PressureCoefficients(X,Y,alphad,CpUpper,CpLower,M,NACA,FigID,plotColor,self.HASPLOT)
+            self.HASPLOT = Plot_PressureCoefficients(X,Y,alphad,CpUpper,CpLower,
+                                                     M,NACA,FigID,plotColor,
+                                                     self.HASPLOT)
 
         self.full_coefficientLift = newcl
         self.pressure_coefficient = Cp
