@@ -20,24 +20,25 @@ def example_NACA0012():
     name = 'NACA0012'
     plotColor = '#00ff08'
     coeffFIG = plt.figure()
-    c = 1
-    N = 100
-    alpha = 5
+    chord_length = 1
+    NUM_SAMPLES = 100
+    angle_of_attack = 5
     plotColor = '#00ff08'
-    NACA0012 = Airfoil(name,c,N,alpha,coeffFIG,plotColor)
+    NACA0012 = Airfoil(name,chord_length,NUM_SAMPLES,
+                       angle_of_attack,coeffFIG,plotColor)
     NACA0012.get_parsed_data()
     NACA0012.get_airfoil_coordinates()
     NACA0012.get_panel_coefficients(True)
-    alpha = 2
+    angle_of_attack = 2
     plotColor = '#ff1f00'
     NACA0012.get_parsed_data()
-    NACA0012.set_angle_of_attack(alpha)
+    NACA0012.set_angle_of_attack(angle_of_attack)
     NACA0012.set_plot_color(plotColor)
     NACA0012.get_panel_coefficients(True)
-    alpha = 10
+    angle_of_attack = 10
     plotColor = '#0074ff'
     NACA0012.get_parsed_data()
-    NACA0012.set_angle_of_attack(alpha)
+    NACA0012.set_angle_of_attack(angle_of_attack)
     NACA0012.set_plot_color(plotColor)
     NACA0012.get_panel_coefficients(True)
     plt.show()
@@ -55,10 +56,10 @@ def example_noplot():
     """
 
     name = 'NACA0012'
-    c = 1
-    N = 100
-    alpha = 5
-    NACA0012 = Airfoil(name,c,N,alpha)
+    chord_length = 1
+    NUM_SAMPLES = 100
+    angle_of_attack = 5
+    NACA0012 = Airfoil(name,chord_length,NUM_SAMPLES,angle_of_attack)
     NACA0012.get_parsed_data()
     NACA0012.get_airfoil_coordinates()
     NACA0012.get_panel_coefficients()

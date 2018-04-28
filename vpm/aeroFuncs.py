@@ -38,8 +38,10 @@ def Plot_PressureCoefficients(X,Y,alpha,CpUpper,CpLower,M,NACA,FigID,plotColor,H
         X: The x-locations of each boundary point on the airfoil
         Y: The y-locations of each boundary point on the airfoil
         alpha: The angle of attack of the airfoil
-        CpUpper: The numpy array containing the upper pressure coefficient values
-        CpLower: The numpy array containing the lower pressure coefficient values
+        CpUpper: The numpy array containing the upper pressure coefficient
+            values
+        CpLower: The numpy array containing the lower pressure coefficient
+            values
         M: The number of samples / panels considered
         NACA: The NACA 4-digit series airfoil name i.e. "NACA0012"
         FigID: The figure handle from matplotlib to plot on
@@ -56,21 +58,29 @@ def Plot_PressureCoefficients(X,Y,alpha,CpUpper,CpLower,M,NACA,FigID,plotColor,H
     plt.figure(FigID.number)
 
     if not HASPLOT[str(FigID.number)]:
-        plt.plot(1.2,0,'|',color='#7d7d7d',visible=True, label='Upper Surface',markersize=7)
-        plt.plot(1.2,0,'2',color='#7d7d7d',visible=True, label='Lower Surface',markersize=7)
+        plt.plot(1.2,0,'|',color='#7d7d7d',visible=True,
+                 label='Upper Surface',markersize=7)
+
+        plt.plot(1.2,0,'2',color='#7d7d7d',visible=True,
+                 label='Lower Surface',markersize=7)
+
         plt.grid(FigID)
         temp_gca = plt.gca()
         temp_gca.invert_yaxis()
         HASPLOT[str(FigID.number)] = True
 
-    xUpper = X[int(M/2):]
-    xLower = X[0:int(M/2)]
+    x_upper = X[int(M/2):]
+    x_lower = X[0:int(M/2)]
 
     plot_Label = NACA + " AOA: " + str(alpha) + "$^\circ$"
 
 
-    plt.plot(xUpper,CpUpper,'-|',color=plotColor, label=plot_Label,markersize=7)
-    plt.plot(xLower,CpLower,'-2',color=plotColor,markersize=9)
+    plt.plot(x_upper,CpUpper,'-|',
+             color=plotColor, label=plot_Label,markersize=7)
+
+    plt.plot(x_lower,CpLower,'-2',
+             color=plotColor,markersize=9)
+
     plt.xlim(-0.1,1.1)
     plt.legend()
     plt.xlabel("Dimensionless Chord Location [X/C]")
