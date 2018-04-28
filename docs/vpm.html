@@ -119,8 +119,8 @@ an existing plot</li>
 </dd></dl>
 
 <dl class="function">
-<dt id="vpm.examples.example_NoPlot">
-<code class="descclassname">vpm.examples.</code><code class="descname">example_NoPlot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vpm/examples.html#example_NoPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vpm.examples.example_NoPlot" title="Permalink to this definition">¶</a></dt>
+<dt id="vpm.examples.example_noplot">
+<code class="descclassname">vpm.examples.</code><code class="descname">example_noplot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vpm/examples.html#example_noplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vpm.examples.example_noplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Demonstrates how to use the airfoil class without plotting.</p>
 <p>This function demonstrates how to use the airfoil class without
 plotting anything.</p>
@@ -145,7 +145,7 @@ plotting anything.</p>
 <span id="vpm-vpmfuncs-module"></span><h2>vpm.vpmfuncs module<a class="headerlink" href="#module-vpm.vpmfuncs" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="vpm.vpmfuncs.Airfoil">
-<em class="property">class </em><code class="descclassname">vpm.vpmfuncs.</code><code class="descname">Airfoil</code><span class="sig-paren">(</span><em>NACA_Name</em>, <em>Chord_Length</em>, <em>NUM_SAMPLES</em>, <em>Angle_Of_Attack</em>, <em>FigID=None</em>, <em>plotColor=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vpm/vpmfuncs.html#Airfoil"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vpm.vpmfuncs.Airfoil" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">vpm.vpmfuncs.</code><code class="descname">Airfoil</code><span class="sig-paren">(</span><em>NACA_Name</em>, <em>Chord_Length</em>, <em>NUM_SAMPLES</em>, <em>Angle_Of_Attack</em>, <em>figure_ID=None</em>, <em>plot_color=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vpm/vpmfuncs.html#Airfoil"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vpm.vpmfuncs.Airfoil" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Airfoil handles calculations made on 4-digit series NACA airfoil.</p>
 <p>The Airfoil class calculates the x-y coordinates of all boundary points on
@@ -160,15 +160,15 @@ coefficients is also an option.</p>
 <li><strong>chord</strong> – The chord length of the airfoil</li>
 <li><strong>NUM_SAMPLES</strong> – The number of samples / panels considered</li>
 <li><strong>angle_of_attack</strong> – The angle of attack of the airfoil</li>
-<li><strong>Figure_To_Plot</strong> – The figure handle from matplotlib to plot on</li>
-<li><strong>PlotColor</strong> – The current color handle for matplotlib to plot with</li>
+<li><strong>figure_to_plot</strong> – The figure handle from matplotlib to plot on</li>
+<li><strong>plot_color</strong> – The current color handle for matplotlib to plot with</li>
 <li><strong>HASPLOT</strong> – Keeps track of whether each fig has been plotted yet</li>
 <li><strong>max_camber</strong> – The maximum camber of the airfoil i.e “0/100, 1/100”</li>
-<li><strong>position_maxCamber</strong> – The position of the max. camber i.e. “4/100”</li>
+<li><strong>position_max_camber</strong> – The position of the max. camber i.e. “4/100”</li>
 <li><strong>thickness</strong> – The maximum thickness of the airfoil i.e. “12/100”, “08/100”</li>
-<li><strong>BoundaryPoints_X</strong> – The x-locations of each boundary point on the airfoil</li>
-<li><strong>BoundaryPoints_Y</strong> – The y-locations of each boundary point on the airfoil</li>
-<li><strong>full_coefficientLift</strong> – The coefficient of lift of the airfoil</li>
+<li><strong>x_boundary_points</strong> – The x-locations of each boundary point on the airfoil</li>
+<li><strong>y_boundary_points</strong> – The y-locations of each boundary point on the airfoil</li>
+<li><strong>full_coefficient_lift</strong> – The coefficient of lift of the airfoil</li>
 <li><strong>pressure_coefficient</strong> – The pressure coefficient at each (x,y) point</li>
 </ul>
 </td>
@@ -176,8 +176,8 @@ coefficients is also an option.</p>
 </tbody>
 </table>
 <dl class="method">
-<dt id="vpm.vpmfuncs.Airfoil.Get_AirfoilCoordinates">
-<code class="descname">Get_AirfoilCoordinates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vpm/vpmfuncs.html#Airfoil.Get_AirfoilCoordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vpm.vpmfuncs.Airfoil.Get_AirfoilCoordinates" title="Permalink to this definition">¶</a></dt>
+<dt id="vpm.vpmfuncs.Airfoil.get_airfoil_coordinates">
+<code class="descname">get_airfoil_coordinates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vpm/vpmfuncs.html#Airfoil.get_airfoil_coordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vpm.vpmfuncs.Airfoil.get_airfoil_coordinates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the points on a NACA 4-digit series airfoil.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -185,7 +185,7 @@ coefficients is also an option.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>max_camber</strong> – The maximum camber</li>
-<li><strong>position_maxCamber</strong> – The location of the maximum camber</li>
+<li><strong>position_max_camber</strong> – The location of the maximum camber</li>
 <li><strong>thickness</strong> – The thickness</li>
 <li><strong>chord</strong> – The chord length</li>
 <li><strong>NUM_SAMPLES</strong> – The number of employed panels</li>
@@ -197,24 +197,25 @@ coefficients is also an option.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="vpm.vpmfuncs.Airfoil.Get_PanelCoefficients">
-<code class="descname">Get_PanelCoefficients</code><span class="sig-paren">(</span><em>PLOT=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vpm/vpmfuncs.html#Airfoil.Get_PanelCoefficients"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vpm.vpmfuncs.Airfoil.Get_PanelCoefficients" title="Permalink to this definition">¶</a></dt>
+<dt id="vpm.vpmfuncs.Airfoil.get_panel_coefficients">
+<code class="descname">get_panel_coefficients</code><span class="sig-paren">(</span><em>PLOT=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vpm/vpmfuncs.html#Airfoil.get_panel_coefficients"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vpm.vpmfuncs.Airfoil.get_panel_coefficients" title="Permalink to this definition">¶</a></dt>
 <dd><p>Forumlates the system of equations for the vortex panel method.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>BoundaryPoints_X</strong> – The dimensionless boundary x locations on the
+<li><strong>x_boundary_points</strong> – The dimensionless boundary x locations on the
 airfoil</li>
-<li><strong>BoundaryPoints_Y</strong> – The dimensionless boundary y locations on the
+<li><strong>y_boundary_points</strong> – The dimensionless boundary y locations on the
 airfoil</li>
 <li><strong>NUM_SAMPLES</strong> – The total number of panels</li>
 <li><strong>angle_of_attack</strong> – The angle of attack</li>
-<li><strong>NACA_ID</strong> – The string that specifies the 4-digit NACA airfoil, ex: 0012</li>
+<li><strong>NACA_ID</strong> – The string that specifies the 4-digit NACA airfoil, for
+example: 0012</li>
 <li><strong>PLOT</strong> – Whether or not to plot Cp vs. x/c; if the plot is desired,
 PLOT == True</li>
-<li><strong>PlotColor</strong> – The matplotlib color handle</li>
+<li><strong>plot_color</strong> – The matplotlib color handle</li>
 </ul>
 </td>
 </tr>
@@ -223,8 +224,8 @@ PLOT == True</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="vpm.vpmfuncs.Airfoil.Get_ParsedData">
-<code class="descname">Get_ParsedData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vpm/vpmfuncs.html#Airfoil.Get_ParsedData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vpm.vpmfuncs.Airfoil.Get_ParsedData" title="Permalink to this definition">¶</a></dt>
+<dt id="vpm.vpmfuncs.Airfoil.get_parsed_data">
+<code class="descname">get_parsed_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vpm/vpmfuncs.html#Airfoil.get_parsed_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vpm.vpmfuncs.Airfoil.get_parsed_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a ‘NACAXXX’ string into its parameters.</p>
 <p>This function will convert the standard name of a naca airfoil
 (ex: “NACA0012” or “NACA1408”, etc) into its corresponding parameters.</p>
@@ -239,43 +240,43 @@ PLOT == True</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="vpm.vpmfuncs.Airfoil.Set_AngleOfAttack">
-<code class="descname">Set_AngleOfAttack</code><span class="sig-paren">(</span><em>alpha</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vpm/vpmfuncs.html#Airfoil.Set_AngleOfAttack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vpm.vpmfuncs.Airfoil.Set_AngleOfAttack" title="Permalink to this definition">¶</a></dt>
+<dt id="vpm.vpmfuncs.Airfoil.set_angle_of_attack">
+<code class="descname">set_angle_of_attack</code><span class="sig-paren">(</span><em>angle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vpm/vpmfuncs.html#Airfoil.set_angle_of_attack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vpm.vpmfuncs.Airfoil.set_angle_of_attack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the angle of attack to use for next calculations.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>alpha</strong> – The new angle of attack</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>self.angle_of_attack</strong> – The new angle of attack</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="vpm.vpmfuncs.Airfoil.Set_Figure">
-<code class="descname">Set_Figure</code><span class="sig-paren">(</span><em>FigID</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vpm/vpmfuncs.html#Airfoil.Set_Figure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vpm.vpmfuncs.Airfoil.Set_Figure" title="Permalink to this definition">¶</a></dt>
+<dt id="vpm.vpmfuncs.Airfoil.set_figure">
+<code class="descname">set_figure</code><span class="sig-paren">(</span><em>figure_ID</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vpm/vpmfuncs.html#Airfoil.set_figure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vpm.vpmfuncs.Airfoil.set_figure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the figure to plot on.</p>
 <p>Changes the figure identifier for the class.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>FigID</strong> – The matplotlib figure identifier</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>figure_ID</strong> – The matplotlib figure identifier</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="vpm.vpmfuncs.Airfoil.Set_PlotColor">
-<code class="descname">Set_PlotColor</code><span class="sig-paren">(</span><em>plotColor</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vpm/vpmfuncs.html#Airfoil.Set_PlotColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vpm.vpmfuncs.Airfoil.Set_PlotColor" title="Permalink to this definition">¶</a></dt>
+<dt id="vpm.vpmfuncs.Airfoil.set_plot_color">
+<code class="descname">set_plot_color</code><span class="sig-paren">(</span><em>plot_color</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vpm/vpmfuncs.html#Airfoil.set_plot_color"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vpm.vpmfuncs.Airfoil.set_plot_color" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the color of the pressure coefficient plot to use.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>plotColor</strong> – The new matplotlib plot color</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>plot_color</strong> – The new matplotlib plot color</td>
 </tr>
 </tbody>
 </table>
