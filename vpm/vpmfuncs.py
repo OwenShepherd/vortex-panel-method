@@ -58,7 +58,7 @@ class Airfoil:
         self.pressure_coefficient = None
 
 
-    def Set_Figure(self,FigID):
+    def set_figure(self,FigID):
         """ Sets the figure to plot on.
 
         Changes the figure identifier for the class.
@@ -71,7 +71,7 @@ class Airfoil:
         if (self.Figure_To_Plot.number not in self.HASPLOT):
             self.HASPLOT[str(self.Figure_To_Plot.number)] = False
 
-    def Set_PlotColor(self,plotColor):
+    def set_plot_color(self,plotColor):
         """ Sets the color of the pressure coefficient plot to use.
 
         Args:
@@ -81,7 +81,7 @@ class Airfoil:
 
         self.PlotColor = plotColor
 
-    def Set_AngleOfAttack(self,alpha):
+    def set_angle_of_attack(self,alpha):
         """ Sets the angle of attack to use for next calculations.
 
         Args:
@@ -91,7 +91,7 @@ class Airfoil:
 
         self.angle_of_attack = alpha
 
-    def Get_ParsedData(self):
+    def get_parsed_data(self):
         """ Converts a 'NACAXXX' string into its parameters.
 
         This function will convert the standard name of a naca airfoil
@@ -115,7 +115,7 @@ class Airfoil:
         self.position_maxCamber = airfoil_parameters[1]/100
         self.thickness = airfoil_parameters[2]/100
 
-    def Get_AirfoilCoordinates(self):
+    def get_airfoil_coordinates(self):
         """ Calculates the points on a NACA 4-digit series airfoil.
 
         Args:
@@ -232,7 +232,7 @@ class Airfoil:
         self.BoundaryPoints_Y = Y
 
 
-    def Get_PanelCoefficients(self,PLOT=False):
+    def get_panel_coefficients(self,PLOT=False):
         """ Forumlates the system of equations for the vortex panel method.
 
         Args:
