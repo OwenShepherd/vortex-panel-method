@@ -108,13 +108,13 @@ def data_comparison(NACA_Name):
     npCp = np.array(Cp)
     npCp = npCp.astype(np.float)
 
-    NACAAirfoil.BoundaryPoints_X = np.around(NACAAirfoil.BoundaryPoints_X,decimals=4)
+    NACAAirfoil.x_boundary_points = np.around(NACAAirfoil.x_boundary_points,decimals=4)
     npX = np.around(npX,decimals=4)
-    NACAAirfoil.BoundaryPoints_Y = np.around(NACAAirfoil.BoundaryPoints_Y,decimals=4)
+    NACAAirfoil.y_boundary_points = np.around(NACAAirfoil.y_boundary_points,decimals=4)
     npY = np.around(npY,decimals=4)
-    NACAAirfoil.full_coefficientLift = np.around(NACAAirfoil.full_coefficientLift,decimals=4)
+    NACAAirfoil.full_coefficient_lift = np.around(NACAAirfoil.full_coefficient_lift,decimals=4)
     npcl = np.around(npcl,decimals=4)
     npCp = np.around(npCp,decimals=4)
     NACAAirfoil.pressure_coefficient = np.around(NACAAirfoil.pressure_coefficient,decimals=4)
 
-    return NACAAirfoil.BoundaryPoints_X, NACAAirfoil.BoundaryPoints_Y, npX, npY, NACAAirfoil.full_coefficientLift, NACAAirfoil.pressure_coefficient, npcl, npCp
+    return NACAAirfoil.x_boundary_points, NACAAirfoil.y_boundary_points, npX, npY, NACAAirfoil.full_coefficient_lift, NACAAirfoil.pressure_coefficient, npcl, npCp
