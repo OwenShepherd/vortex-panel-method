@@ -9,6 +9,8 @@ sys.path.insert(0,filepath)
 
 from vpm.vpmfuncs import *
 
+"""TODO: This file is pretty ugly as of now."""
+
 def test_NACA0012():
     testName = 'NACA0012'
     XPy, YPy, XMat, YMat, clPy, CpPy, clMat, cPMat = data_comparison(testName)
