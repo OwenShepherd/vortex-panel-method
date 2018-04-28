@@ -304,16 +304,16 @@ class Airfoil:
                          - (Y[i]-YB[j])
                          * math.sin(theta[j]))
 
-                    B = (X[i]-XB[j])**2
-                         + (Y[i]-YB[j])**2
+                    B = ((X[i]-XB[j])**2
+                         + (Y[i]-YB[j])**2)
 
                     C = math.sin(theta[i]-theta[j])
                     D = math.cos(theta[i]-theta[j])
 
-                    E = (X[i]-XB[j])
+                    E = ((X[i]-XB[j])
                          * math.sin(theta[j])
                          - (Y[i]-YB[j])
-                         * math.cos(theta[j])
+                         * math.cos(theta[j]))
 
                     F = math.log(1+S[j]*(S[j]+2*A)/B)
                     G = math.atan2((E*S[j]),(B+A*S[j]))
