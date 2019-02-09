@@ -3,7 +3,6 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 import pdb
-from vpm.aeroFuncs import *
 
 
 class Airfoil:
@@ -32,7 +31,7 @@ class Airfoil:
     """
 
 
-    def __init__(self,NACA_Name,Chord_Length,NUM_SAMPLES,Angle_Of_Attack,
+    def __init__(self,NACA_Name,Chord_Length=1,NUM_SAMPLES=100,Angle_Of_Attack=0,
                  figure_ID=None,plot_color=None):
         """ The Airfoil class constructor.
 
@@ -56,6 +55,7 @@ class Airfoil:
         self.thickness = None
         self.full_coefficient_lift = None
         self.pressure_coefficient = None
+        self.get_parsed_data()
 
 
     def set_figure(self,figure_ID):
