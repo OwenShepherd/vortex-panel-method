@@ -2,10 +2,7 @@ import os.path
 import sys
 import csv
 import numpy as np
-
-scriptDir = sys.path[0]
-filepath = os.path.abspath(os.path.join(scriptDir,".."))
-sys.path.insert(0,filepath)
+from .context import vpm
 
 from vpm.vpmfuncs import *
 

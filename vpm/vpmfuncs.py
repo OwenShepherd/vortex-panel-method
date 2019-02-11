@@ -114,6 +114,30 @@ class Airfoil:
         self.position_max_camber = airfoil_parameters[1]/100
         self.thickness = airfoil_parameters[2]/100
 
+    def get_lift_coefficients(self,V,S,M):
+        """
+        Function: Calculate_LiftCoefficients
+
+        Purpose: This function computes the coefficient of lift for an airfoil as to
+        be used in the vortex panel method "Calculate_PanelCoefficients"
+
+        Parameters:
+            V - The dimensionlesss velocity at each control point
+            S - The dimensionless length of each of the control points
+            M - The number of panels
+
+        Returns:
+            cl - The coefficient of lift
+        """
+
+        gamma = 0
+        for j in range(M):
+            gamma = gamma + V[j]*S[j]
+
+        cl = []
+        cl.append(2*gamma)
+
+
     def get_airfoil_coordinates(self):
         """ Calculates the points on a NACA 4-digit series airfoil.
 
@@ -359,8 +383,7 @@ class Airfoil:
             for j in range(MP1):
                 V[i] = V[i] + At[i,j]*gamma[j]
                 Cp[i] = 1 - (V[i])**2
-
-        cl = Get_LiftCoefficients(V,S,self.NUM_SAMPLES)
+        cl = self.get_lift_coefficients(V,S,self.NUM_SAMPLES)
 
         CpLower = Cp[0:int(self.NUM_SAMPLES/2)]
         CpUpper = Cp[int(self.NUM_SAMPLES/2):]
