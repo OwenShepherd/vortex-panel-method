@@ -4,11 +4,16 @@ import csv
 import numpy as np
 from .context import vpm
 
+
 from vpm.vpmfuncs import *
 
 def test_NACA0012():
     testName = 'NACA0012'
     XPy, YPy, XMat, YMat, clPy, CpPy, clMat, cPMat = data_comparison(testName)
+    print(XPy)
+    print(XMat)
+    print(clPy)
+    print(clMat)
     for i in range(len(XPy)):
         assert(abs(XPy[i]-XMat[i])<=0.001)
         assert(abs(YPy[i]-YMat[i])<=0.001)
@@ -77,9 +82,6 @@ def data_comparison(NACA_Name):
 
 
     NACAAirfoil = Airfoil(NACA_Name,c,N,alpha)
-    NACAAirfoil.get_parsed_data()
-    NACAAirfoil.get_airfoil_coordinates()
-    NACAAirfoil.get_panel_coefficients()
 
     relpath = sys.path[0] + '/tests/test_data/' + NACA_Name + '.csv'
 
