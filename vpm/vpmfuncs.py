@@ -1,7 +1,6 @@
 from __future__ import division
 import math
 import numpy as np
-import pdb
 
 
 class Airfoil:
@@ -48,12 +47,14 @@ class Airfoil:
 
         self._calculate_parameters()
 
+####################### Private Functions ##############################
+
     def _calculate_parameters(self):
         """ Sets the parsed data, calculates the geometric shape, and then
         produces the coefficients of pressure and the coefficient of lift for
         the airfoil
         """
-        
+
         self._parsed_data()
         self._airfoil_coordinates()
         self._panel_coefficients()
@@ -352,6 +353,11 @@ class Airfoil:
             cl = 2*gamma
 
         return cl
+
+
+######################## Public Functions ######################################
+
+
 
     def set_angle_of_attack(self,angle):
         """ Sets the angle of attack to use for next calculations.
