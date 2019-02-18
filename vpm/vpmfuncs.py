@@ -24,6 +24,7 @@ class Airfoil:
 
     """
 
+############################## Constructor #####################################
 
     def __init__(self,NACA_Name,Chord_Length=1,NUM_SAMPLES=100,Angle_Of_Attack=0
                 ):
@@ -52,7 +53,7 @@ class Airfoil:
     def _calculate_parameters(self):
         """ Sets the parsed data, calculates the geometric shape, and then
         produces the coefficients of pressure and the coefficient of lift for
-        the airfoil
+        the airfoil.
         """
 
         self._parsed_data()
@@ -338,13 +339,13 @@ class Airfoil:
         Purpose: This function computes the coefficient of lift for an airfoil as to
         be used in the vortex panel method "Calculate_PanelCoefficients"
 
-        Parameters:
-            V - The dimensionlesss velocity at each control point
-            S - The dimensionless length of each of the control points
-            M - The number of panels
+        Args:
+            V: The dimensionlesss velocity at each control point
+            S: The dimensionless length of each of the control points
+            M: The number of panels
 
         Returns:
-            cl - The coefficient of lift
+            float: The coefficient of lift, Cl.
         """
 
         gamma = 0
@@ -354,18 +355,67 @@ class Airfoil:
 
         return cl
 
-
 ######################## Public Functions ######################################
-
-
 
     def set_angle_of_attack(self,angle):
         """ Sets the angle of attack to use for next calculations.
 
         Args:
-            self.angle_of_attack: The new angle of attack
-
+            angle: The new angle of attack
         """
 
         self.angle_of_attack = angle
         self._calculate_parameters()
+
+    def set_chord_length(self, length):
+        """ Sets the chord length used in the calculations.
+
+        Args:
+            length: The chord length of the airfoil.
+        """
+        self.chord = length
+        _calculate_parameters()
+
+    def set_num_samples(self, samples):
+        """ Sets the number of panels used for sampling the airfoil.
+
+        Args:
+            samples: The number of samples / panels used for airfoil calculations.
+        """
+        self.NUM_SAMPLES = samples
+        _calculate_parameters()
+
+    def set_airfoil(self, NACA_ID):
+        """Sets the airfoil type used.
+
+        Args:
+            NACA_ID: The 4-digit series airfoil name.  Example: 'NACA0012'
+        """
+
+        self.NACA_ID = NACA_ID
+        self._calculate_parameters()
+
+    def get_airfoil_coordinates(self):
+        """ Returns the coordinates of the airfoil.
+
+        Returns:
+            tuple: An array of x-coordinates and y-coordinates of boundary
+            points.  [X,Y]
+        """
+        return self.x_boundary_points, self.y_boundary_points
+
+    def get_coefficient_lift(self):
+        """ Returns the coefficient of lift.
+
+        Returns:
+            float: The airfoil's coefficient of lift (per meter span), Cl.
+        """
+        return self.full_coefficient_lift
+
+    def get_pressure_coefficients(self):
+        """ Returns the pressure coefficient at the midpoint of each panel.
+
+        Returns:
+            float[]: Pressure coefficient at each boundary point, Cp.
+        """
+        return self.pressure_coefficient
