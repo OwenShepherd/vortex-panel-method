@@ -1,13 +1,4 @@
-import os.path
-import sys
 import numpy as np
-import matplotlib as plt
-import pdb
-RootPath = os.path.abspath(os.path.join(sys.path[0],".."))
-sys.path.insert(0,os.path.abspath(RootPath))
-
-from vpm.vpmfuncs import *
-
 
 def example_NACA0012():
     """ Example plotting a NACA0012 at a few angles of attack.
@@ -18,29 +9,12 @@ def example_NACA0012():
     """
 
     name = 'NACA0012'
-    plotColor = '#00ff08'
-    coeffFIG = plt.figure()
     c = 1
-    N = 100
+    N = 10
     alpha = 5
-    plotColor = '#00ff08'
-    NACA0012 = Airfoil(name,c,N,alpha,coeffFIG,plotColor)
-    NACA0012.get_parsed_data()
-    NACA0012.get_airfoil_coordinates()
-    NACA0012.get_panel_coefficients(True)
-    alpha = 2
-    plotColor = '#ff1f00'
-    NACA0012.get_parsed_data()
-    NACA0012.set_angle_of_attack(alpha)
-    NACA0012.set_plot_color(plotColor)
-    NACA0012.get_panel_coefficients(True)
-    alpha = 10
-    plotColor = '#0074ff'
-    NACA0012.get_parsed_data()
-    NACA0012.set_angle_of_attack(alpha)
-    NACA0012.set_plot_color(plotColor)
-    NACA0012.get_panel_coefficients(True)
-    plt.show()
+    NACA0012 = Airfoil(name,c,N,alpha)
+    NACA0012.set_num_samples(16)
+    NACA0012.set_num_samples(18)
 
 def example_noplot():
     """ Demonstrates how to use the airfoil class without plotting.
@@ -59,17 +33,6 @@ def example_noplot():
     N = 100
     alpha = 5
     NACA0012 = Airfoil(name,c,N,alpha)
-    NACA0012.get_parsed_data()
-    NACA0012.get_airfoil_coordinates()
-    NACA0012.get_panel_coefficients()
-    return NACA0012.pressure_coefficient
-
 
 if __name__=="__main__":
-    FunctionCall = sys.argv[1]
-    possibles = globals().copy()
-    possibles.update(locals())
-    method = possibles.get(FunctionCall)
-    if not method:
-        raise NotImplementedError("Method %s not implemented." %FunctionCall)
-    method()
+    example_NACA0012()

@@ -4,14 +4,6 @@ vpm package
 Submodules
 ----------
 
-vpm\.aeroFuncs module
----------------------
-
-.. automodule:: vpm.aeroFuncs
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 vpm\.examples module
 --------------------
 
