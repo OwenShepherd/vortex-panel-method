@@ -2,8 +2,8 @@ import os.path
 import sys
 import csv
 import numpy as np
-from .context import vpm
-from vpm.vpmfuncs import Airfoil
+from .context import aerotools
+from aerotools.vpm import Airfoil
 
 
 def test_NACA0012():

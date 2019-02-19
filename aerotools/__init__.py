@@ -1,2 +1,2 @@
-from .vpmfuncs import *
+from .vpm import *
 from .examples import *
