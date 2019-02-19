@@ -1,3 +1,2 @@
-# Aero-VPM
-Aero-VPM is to be a demonstration of using the vortex panel method in order to
-calculate the lift of generic NACA airfoils.
+# Aerotools
+A set of tools that would have been useful as an Aerospace Engineering student.
