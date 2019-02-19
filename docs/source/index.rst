@@ -10,7 +10,7 @@ Welcome to Vortex-Panel-Method's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+   aerotools
 
 Indices and tables
 ==================

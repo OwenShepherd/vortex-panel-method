@@ -1,7 +1,8 @@
-vpm
-===
+aerotools
+=========
 
 .. toctree::
    :maxdepth: 4
 
-   vpm
+   aerotools
+

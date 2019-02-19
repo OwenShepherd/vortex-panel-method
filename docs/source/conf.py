@@ -16,7 +16,7 @@ import os
 import sys
 insertPath = os.path.abspath(os.path.join('.','..','..'))
 sys.path.insert(0,insertPath)
-
+sys.path.insert(0, os.path.abspath('../..'))
 
 # -- Project information -----------------------------------------------------
 
