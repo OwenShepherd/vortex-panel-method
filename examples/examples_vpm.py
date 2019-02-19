@@ -1,4 +1,6 @@
 import numpy as np
+from context import aerotools
+from aerotools import vpm
 
 def example_NACA0012():
     """ Example plotting a NACA0012 at a few angles of attack.
@@ -12,7 +14,7 @@ def example_NACA0012():
     c = 1
     N = 10
     alpha = 5
-    NACA0012 = Airfoil(name,c,N,alpha)
+    NACA0012 = vpm.Airfoil(name,c,N,alpha)
     NACA0012.set_num_samples(16)
     NACA0012.set_num_samples(18)
 
@@ -32,7 +34,7 @@ def example_noplot():
     c = 1
     N = 100
     alpha = 5
-    NACA0012 = Airfoil(name,c,N,alpha)
+    NACA0012 = vpm.Airfoil(name,c,N,alpha)
 
 if __name__=="__main__":
     example_NACA0012()
