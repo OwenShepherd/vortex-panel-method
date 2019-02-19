@@ -1,2 +1,2 @@
 # Aerotools
-A set of tools that would have been useful as an Aerospace Engineering student.
+Tools that may or may not have been useful to me as an Aerospace student.  Currently mostly just for practice building a python project.
