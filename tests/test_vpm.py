@@ -9,10 +9,6 @@ from vpm.vpmfuncs import Airfoil
 def test_NACA0012():
     testName = 'NACA0012'
     XPy, YPy, XMat, YMat, clPy, CpPy, clMat, cPMat = data_comparison(testName)
-    print(XPy)
-    print(XMat)
-    print(clPy)
-    print(clMat)
     for i in range(len(XPy)):
         assert(abs(XPy[i]-XMat[i])<=0.001)
         assert(abs(YPy[i]-YMat[i])<=0.001)

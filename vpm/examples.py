@@ -1,5 +1,4 @@
 import numpy as np
-from vpmfuncs import Airfoil
 
 def example_NACA0012():
     """ Example plotting a NACA0012 at a few angles of attack.

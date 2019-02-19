@@ -1,7 +1,6 @@
 import math
 import numpy as np
 
-
 class Airfoil:
     """ Airfoil handles calculations made on 4-digit series NACA airfoil.
 
@@ -77,6 +76,10 @@ class Airfoil:
                                 * (1+x[i]/self.chord-2*self.position_max_camber))
                 yc.append(yc_value)
                 dyc.append(dyc_value)
+
+        else:
+            yc = [0] * len(x)
+            dyc = yc
 
         return yc, dyc
 
@@ -181,37 +184,19 @@ class Airfoil:
             XL.append(x_coordinates[i])
             YL.append(yc[i]-yt[i]*math.cos(zeta[i]))
 
-        print(XU)
-        print(XL)
-        print(YU)
-        print(YL)
-
         # This ensures that the boundary points go from the trailing edge, clockwise
         # back to the trailing edge with two boundary points at the trailing edge
         # and one at the leading edge
-        XU = np.delete(XU,-1)
-        YU = np.delete(YU,-1)
-        XU = XU[::-1]
-        YU = YU[::-1]
-        XL = XL[0,:]
-        YL = YL[0,:]
+        del XU[-1]
+        del YU[-1]
+        XU.reverse()
+        YU.reverse()
 
-        X = np.concatenate([XL,XU])
-        Y = np.concatenate([YL,YU])
-################################################################################
+        X = XL+XU
+        Y = YL+YU
 
-
-
-
-
-
-
-
-################################################################################
         self.x_boundary_points = X
         self.y_boundary_points = Y
-################################################################################
-
 
 
 
@@ -232,19 +217,15 @@ class Airfoil:
         y_coordinates = self.y_boundary_points
         number_panels = self.NUM_SAMPLES
         NACA_4digit = self.NACA_ID[4:]
-
-
-
         alphad = self.angle_of_attack
         self.angle_of_attack = math.radians(self.angle_of_attack)
-
         MP1 = number_panels + 1 # The trailing edge requries an extra point
-
         X = np.zeros(number_panels)
         Y = np.zeros(number_panels)
         RHS = np.zeros(MP1)
         theta = np.zeros(number_panels)
         S = np.zeros(number_panels)
+
 
         for i in range(number_panels):
             IP1 = i + 1
@@ -336,15 +317,14 @@ class Airfoil:
         V = np.zeros(number_panels)
         Cp = np.zeros(number_panels)
 
-
         for i in range(number_panels):
             V[i] = math.cos(theta[i] - self.angle_of_attack)
 
             for j in range(MP1):
                 V[i] = V[i] + At[i,j]*gamma[j]
                 Cp[i] = 1 - (V[i])**2
-        cl = self._lift_coefficients(V,S,self.NUM_SAMPLES)
 
+        cl = self._lift_coefficients(V,S,self.NUM_SAMPLES)
         CpLower = Cp[0:int(self.NUM_SAMPLES/2)]
         CpUpper = Cp[int(self.NUM_SAMPLES/2):]
         Cp = Cp.astype(np.float)
@@ -353,6 +333,7 @@ class Airfoil:
 
         self.full_coefficient_lift = newcl
         self.pressure_coefficient = Cp
+
 
     def _lift_coefficients(self,V,S,M):
         """
