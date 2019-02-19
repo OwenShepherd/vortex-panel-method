@@ -2,9 +2,9 @@ import os.path
 import sys
 import csv
 import numpy as np
-
 from .context import vpm
-from vpm.vpmfuncs import *
+from vpm.vpmfuncs import Airfoil
+
 
 def test_NACA0012():
     testName = 'NACA0012'
