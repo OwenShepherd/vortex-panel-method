@@ -4,8 +4,8 @@ aerotools package
 Submodules
 ----------
 
-aerotools\.vpm module
----------------------
+aerotools.vpm module
+--------------------
 
 .. automodule:: aerotools.vpm
     :members:
