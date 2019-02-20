@@ -4,14 +4,15 @@ def readme():
     with open('README.md') as f:
         return f.read()
 
-setup(name='vpm',
+setup(
+      name='aerotools',
       version='0.01',
-      description='Vortex Panel Method',
-      long_description="""Adapted for Python from Kuethe and Chow
-      url='https://github.com/OwenShepherd/vortex-panel-method""",
-      author='KCO',
+      description='Aerospace Engineering Toolbox',
+      long_description= readme(),
+      author='Owen Shepherd',
       author_email='owen.shepherd@colorado.edu',
       license='MIT',
-      packages=['vpm'],
+      packages=setuptools.find_packages(),
       zip_safe=False,
-      include_package_data=True)
+      include_package_data=True
+)
