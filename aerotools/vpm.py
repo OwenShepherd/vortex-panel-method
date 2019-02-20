@@ -34,6 +34,8 @@ class Airfoil:
         """
         self.x_boundary_points = None
         self.y_boundary_points = None
+        self.x_panel_points = None
+        self.y_panel_points = None
         self.NUM_SAMPLES = NUM_SAMPLES
         self.NACA_ID = NACA_Name
         self.chord = Chord_Length
@@ -331,6 +333,9 @@ class Airfoil:
         newcl = np.array(cl)
         newcl = newcl.astype(np.float)
 
+        self.x_panel_points = X
+        self.y_panel_points = Y
+
         self.full_coefficient_lift = newcl
         self.pressure_coefficient = Cp
 
@@ -406,6 +411,16 @@ class Airfoil:
             points.  [X,Y]
         """
         return self.x_boundary_points, self.y_boundary_points
+
+    def get_panel_coordinates(self):
+        """ Returns the coordinates of the midpoints of the panels.
+
+        Returns:
+            tuple: An array of x-coordinates and y-coordiantes of the panel mid-
+            points.  [X, Y]
+        """
+
+        return self.x_panel_points, self.y_panel_points
 
     def get_coefficient_lift(self):
         """ Returns the coefficient of lift.
