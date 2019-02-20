@@ -1,0 +1,5 @@
+build:
+        image: latest
+
+python:
+        pip_install: true
