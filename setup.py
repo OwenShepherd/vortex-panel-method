@@ -12,9 +12,9 @@ setup(
       author='Owen Shepherd',
       author_email='owen.shepherd@colorado.edu',
       license='MIT',
-      packages=setuptools.find_packages(),
+      packages=['aerotools'],
       zip_safe=False,
-      include_package_data=True
+      include_package_data=True,
       install_requires=[
           'numpy'
       ]
