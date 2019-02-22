@@ -1,6 +1,6 @@
 # Aerotools
 [![Documentation Status](https://readthedocs.org/projects/aerotools/badge/?version=latest)](https://aerotools.readthedocs.io/en/latest/?badge=latest)  
-
+[![Build Status](https://travis-ci.org/OwenShepherd/aerotools.svg?branch=master)](https://travis-ci.org/OwenShepherd/aerotools)
 
 
 ### Overview  
